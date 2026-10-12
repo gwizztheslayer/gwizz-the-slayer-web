@@ -1,7 +1,7 @@
-export type GalleryArtwork = {
+﻿export type GalleryArtwork = {
   id: string;
   title: string;
-  year: number;
+  year: string;
   medium: string;
   dimensions: string;
   collection: string;
@@ -12,53 +12,97 @@ export type GalleryArtwork = {
 
 export const GALLERY_ARTWORKS: GalleryArtwork[] = [
   {
-    id: "artwork-stranded",
-    title: "STRANDED",
-    year: 2026,
-    medium: "Oil and impasto on heavy Belgian linen",
-    dimensions: "160 × 120 cm (63 × 47 in)",
+    id: "artwork-smoked-out-halo",
+    title: "SMOKED OUT HALO",
+    year: "Not specified",
+    medium: "Acrylic on canvas",
+    dimensions: "Not specified",
     collection: "Cosmic & Extraterrestrial",
     status: "Available",
-    src: "/gallery/stranded_alien_painting_1791650734079.jpg",
-    description: "A solitary figure floats against a vivid crimson field, confronting the viewer with vulnerability and isolation."
+    src: "/gallery/art-1.JPG",
+    description: "An extraterrestrial portrait titled Smoked Out Halo."
   },
   {
-    id: "artwork-emerald-visage",
-    title: "EMERALD VISAGE",
-    year: 2026,
-    medium: "Oil, raw pigment, and graphite on stretched linen",
-    dimensions: "140 × 105 cm (55 × 41 in)",
+    id: "artwork-volcanic-vision",
+    title: "VOLCANIC VISION",
+    year: "Not specified",
+    medium: "Acrylic on canvas",
+    dimensions: "Not specified",
+    collection: "Cosmic & Extraterrestrial",
+    status: "Available",
+    src: "/gallery/art-2.JPG",
+    description: "An alien-inspired painting titled Volcanic Vision."
+  },
+  {
+    id: "artwork-planet-walk",
+    title: "PLANET WALK",
+    year: "Not specified",
+    medium: "Acrylic on canvas",
+    dimensions: "Not specified",
+    collection: "Cosmic & Extraterrestrial",
+    status: "Reserved",
+    src: "/gallery/art-3.JPG",
+    description: "A cosmic scene featuring an alien figure, titled Planet Walk."
+  },
+  {
+    id: "artwork-no-fcks-given",
+    title: "NO F#CKS GIVEN",
+    year: "Not specified",
+    medium: "Acrylic on canvas",
+    dimensions: "Not specified",
     collection: "Visages & Monoliths",
     status: "Available",
-    src: "/gallery/emerald_visage_painting_1791650743793.jpg",
-    description: "An otherworldly face emerges from deep shadow, its luminous green eyes set against sweeping dark brushwork."
+    src: "/gallery/art-4.JPG",
+    description: "An irreverent alien artwork titled No F#cks Given."
   },
   {
-    id: "artwork-cosmic-rebellion",
-    title: "COSMIC REBELLION",
-    year: 2025,
-    medium: "Oil, alkyd, and neon dispersion on double-primed cotton canvas",
-    dimensions: "180 × 220 cm (71 × 87 in)",
+    id: "artwork-the-grey-stare",
+    title: "THE GREY STARE",
+    year: "Not specified",
+    medium: "Acrylic on canvas",
+    dimensions: "Not specified",
+    collection: "Visages & Monoliths",
+    status: "Available",
+    src: "/gallery/art-5.JPG",
+    description: "An alien portrait focused on the gaze, titled The Grey Stare."
+  },
+  {
+    id: "artwork-abduction-protocol",
+    title: "ABDUCTION PROTOCOL",
+    year: "Not specified",
+    medium: "Acrylic on canvas",
+    dimensions: "Not specified",
+    collection: "Cosmic & Extraterrestrial",
+    status: "Available",
+    src: "/gallery/art-6.JPG",
+    description: "A UFO-themed painting titled Abduction Protocol."
+  },
+  {
+    id: "artwork-apocalyptic-vision",
+    title: "APOCALYPTIC VISION",
+    year: "Not specified",
+    medium: "Acrylic on canvas",
+    dimensions: "Not specified",
     collection: "Abstract Energy",
     status: "Reserved",
-    src: "/gallery/cosmic_rebellion_painting_1791650753186.jpg",
-    description: "Fractured celestial forms and electric lime marks cut through a field of charcoal and mineral black."
+    src: "/gallery/art-7.JPG",
+    description: "A surreal alien painting titled Apocalyptic Vision."
   },
   {
-    id: "artwork-obsidian-monolith",
-    title: "OBSIDIAN MONOLITH & TWIN MOONS",
-    year: 2025,
-    medium: "Oil and volcanic sand paste on reinforced linen",
-    dimensions: "170 × 130 cm (67 × 51 in)",
+    id: "artwork-the-specimen",
+    title: "THE SPECIMEN",
+    year: "Not specified",
+    medium: "Acrylic on canvas",
+    dimensions: "Not specified",
     collection: "Visages & Monoliths",
     status: "Available",
-    src: "/gallery/obsidian_monolith_painting_1791650761784.jpg",
-    description: "A dark monolith rises from a spare desert landscape beneath two glowing moons."
+    src: "/gallery/art-8.JPG",
+    description: "An alien artwork presented as a specimen, titled The Specimen."
   }
 ];
 
 export const FEATURED_ARTWORK_IDS = [
-  "artwork-stranded",
-  "artwork-cosmic-rebellion",
-  "artwork-obsidian-monolith"
+  "artwork-smoked-out-halo",
+  "artwork-planet-walk",
+  "artwork-the-grey-stare"
 ];

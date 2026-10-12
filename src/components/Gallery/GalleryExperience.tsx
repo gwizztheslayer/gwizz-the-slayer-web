@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -153,7 +153,7 @@ export default function GalleryExperience() {
               <button type="button" onClick={() => setSelectedArtwork(null)} className="float-right border border-white/20 px-3 py-2 font-mono text-xs text-zinc-300 hover:border-toxic hover:text-toxic">Close</button>
               <p className="font-mono text-xs uppercase tracking-widest text-toxic">{selectedArtwork.collection}</p>
               <h2 id="artwork-title" className="mt-4 text-3xl font-black uppercase text-white">{selectedArtwork.title}</h2>
-              <p className="mt-2 font-mono text-sm text-zinc-500">{selectedArtwork.year} · {selectedArtwork.status}</p>
+              <p className="mt-2 font-mono text-sm text-zinc-500">{selectedArtwork.year} ┬╖ {selectedArtwork.status}</p>
               <p className="mt-8 leading-relaxed text-zinc-300">{selectedArtwork.description}</p>
               <dl className="mt-8 space-y-4 border-t border-white/10 pt-6 text-sm">
                 <div><dt className="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Medium</dt><dd className="mt-1 text-zinc-200">{selectedArtwork.medium}</dd></div>

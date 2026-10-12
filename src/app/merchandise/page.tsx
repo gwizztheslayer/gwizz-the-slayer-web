@@ -1,11 +1,11 @@
-import type { Metadata } from "next";
-import Arsenal from "@/components/Arsenal/Arsenal";
+import MerchandiseExperience from "@/components/Merchandise/MerchandiseExperience";
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Merchandise | G-Wizz, The Slayer",
-  description: "Browse merchandise and digital releases from G-Wizz, The Slayer."
+  title: "Supply Depot | G-Wizz, The Slayer",
+  description: "Official Syndicate uniform and artifacts. Limited production runs.",
 };
 
 export default function MerchandisePage() {
-  return <main className="min-h-screen bg-black text-white"><Arsenal /></main>;
+  return <MerchandiseExperience />;
 }
