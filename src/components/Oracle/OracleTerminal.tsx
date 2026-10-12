@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import React, { useState, useEffect, useRef } from 'react';
 
 type Message = { role: 'user' | 'kairo'; content: string };
@@ -58,7 +58,7 @@ export default function OracleTerminal({ isWidget = false }: { isWidget?: boolea
       >
         {messages.map((msg, i) => (
           <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-            <span className={`text-[10px] tracking-widest mb-1 ${msg.role === 'user' ? 'text-zinc-500' : 'text-toxic/50'}`}>
+            <span className={`text-[10px] tracking-widest mb-1 ${msg.role === 'user' ? 'text-zinc-300' : 'text-toxic'}`}>
               {msg.role === 'user' ? 'GUEST_USER' : 'K.A.I.R.O.'}
             </span>
             <div className={`text-sm md:text-base ${msg.role === 'user' ? 'text-white' : 'text-toxic drop-shadow-[0_0_5px_rgba(57,255,20,0.5)]'}`}>
@@ -74,7 +74,7 @@ export default function OracleTerminal({ isWidget = false }: { isWidget?: boolea
       </div>
 
       <form onSubmit={handleSend} className="border-t border-toxic/30 p-2 md:p-3 flex gap-2 bg-black">
-        <span className="text-toxic/50 pt-2 font-bold">{'>'}</span>
+        <span className="text-toxic pt-2 font-bold">{'>'}</span>
         <input
           type="text"
           value={input}
@@ -90,3 +90,4 @@ export default function OracleTerminal({ isWidget = false }: { isWidget?: boolea
     </div>
   );
 }
+

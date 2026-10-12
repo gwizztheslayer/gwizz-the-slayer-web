@@ -9,7 +9,7 @@ export default function NotFound() {
       <h2 className="text-xl sm:text-2xl font-bold uppercase tracking-widest text-white mb-6">
         LOST IN THE VAULT
       </h2>
-      <p className="text-white/40 max-w-md text-sm sm:text-base mb-8 uppercase tracking-wider leading-relaxed">
+      <p className="text-zinc-400 max-w-md text-sm sm:text-base mb-8 uppercase tracking-wider leading-relaxed">
         The link you followed has been dragged into the dark corners of the grid. It does not exist or has been deleted.
       </p>
       <Link 

@@ -55,7 +55,7 @@ export default function LyricsSector() {
               )}
               <div>
                 <div className="text-white font-bold text-lg">{geniusData.title}</div>
-                <div className="text-zinc-500 text-xs mt-2 uppercase">Verified Transcription Available</div>
+                <div className="text-zinc-300 text-xs mt-2 uppercase">Verified Transcription Available</div>
               </div>
               <a href={geniusData.url} target="_blank" rel="noopener noreferrer" className="inline-block border border-toxic text-toxic px-8 py-3 uppercase tracking-widest text-xs hover:bg-toxic hover:text-black transition-colors">
                 [ ACCESS FULL LYRICS ]
@@ -66,7 +66,7 @@ export default function LyricsSector() {
               [ TRANSCRIPT NOT FOUND IN DATABASE ]
             </div>
           ) : (
-            <div className="text-zinc-600 uppercase tracking-widest text-xs">
+            <div className="text-zinc-400 uppercase tracking-widest text-xs">
               [ SELECT AUDIO FILE TO INITIALIZE ]
             </div>
           )}
@@ -75,3 +75,4 @@ export default function LyricsSector() {
     </section>
   );
 }
+

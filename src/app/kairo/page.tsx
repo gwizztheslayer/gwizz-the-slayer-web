@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import OracleTerminal from '@/components/Oracle/OracleTerminal';
 import { Metadata } from 'next';
 
@@ -16,7 +16,7 @@ export default function KairoPage() {
         <h1 className="text-4xl md:text-6xl font-black text-white uppercase tracking-[0.3em] drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
           K.A.I.R.<span className="text-toxic">O.</span>
         </h1>
-        <p className="text-zinc-500 text-xs md:text-sm tracking-widest mt-4 uppercase">
+        <p className="text-zinc-400 text-xs md:text-sm tracking-widest mt-4 uppercase">
           [ KNYSNA ARTIFICIAL INTELLIGENCE RELAY OPERATOR ]
         </p>
       </div>

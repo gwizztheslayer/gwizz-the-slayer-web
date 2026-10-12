@@ -1,82 +1,131 @@
 "use client";
-import { motion } from "framer-motion";
+
+import { useEffect, useMemo, useState } from "react";
+
+type LiveEvent = {
+  id?: string;
+  datetime: string;
+  title?: string;
+  url?: string;
+  offers?: { url?: string }[];
+  venue?: {
+    name?: string;
+    city?: string;
+    region?: string;
+    country?: string;
+    latitude?: string | number;
+    longitude?: string | number;
+  };
+};
+
+function coordinatesFor(event: LiveEvent | undefined) {
+  const latitude = Number(event?.venue?.latitude);
+  const longitude = Number(event?.venue?.longitude);
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
+  if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) return null;
+  return { latitude, longitude };
+}
+
+const KNYSNA_MAP_CENTER = { latitude: -34.0421, longitude: 23.0492 };
 
 export default function LiveTransmissions() {
+  const [events, setEvents] = useState<LiveEvent[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [feedError, setFeedError] = useState(false);
+  const appId = process.env.NEXT_PUBLIC_BANDSINTOWN_APP_ID;
+
+  useEffect(() => {
+    if (!appId) return;
+
+    const controller = new AbortController();
+    const loadEvents = async () => {
+      try {
+        const response = await fetch(
+          `https://rest.bandsintown.com/artists/G-Wizz%2C%20The%20Slayer/events?app_id=${encodeURIComponent(appId)}`,
+          { signal: controller.signal }
+        );
+        if (!response.ok) throw new Error("The event feed returned an error.");
+        const result: unknown = await response.json();
+        if (!Array.isArray(result)) throw new Error("The event feed response was invalid.");
+        const upcoming = (result as LiveEvent[])
+          .filter((event) => event.datetime && Date.parse(event.datetime) >= Date.now())
+          .sort((a, b) => Date.parse(a.datetime) - Date.parse(b.datetime));
+        setEvents(upcoming);
+      } catch {
+        if (!controller.signal.aborted) setFeedError(true);
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
+      }
+    };
+
+    void loadEvents();
+    return () => controller.abort();
+  }, [appId]);
+
+  const selectedEvent = events[selectedIndex] ?? events[0];
+  const coordinates = useMemo(() => coordinatesFor(selectedEvent), [selectedEvent]);
+  const mapCenter = coordinates ?? KNYSNA_MAP_CENTER;
+  const mapHref = `https://www.openstreetmap.org/?mlat=${mapCenter.latitude}&mlon=${mapCenter.longitude}#map=${coordinates ? 15 : 13}/${mapCenter.latitude}/${mapCenter.longitude}`;
+  const marker = coordinates ? `&marker=${coordinates.latitude}%2C${coordinates.longitude}` : "";
+  const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${mapCenter.longitude - 0.08}%2C${mapCenter.latitude - 0.05}%2C${mapCenter.longitude + 0.08}%2C${mapCenter.latitude + 0.05}&layer=mapnik${marker}`;
+
   return (
-    <section id="shows" className="py-24 bg-black/90 border-t border-toxic/20 relative z-10">
-      <div className="max-w-7xl mx-auto px-4">
-        <motion.h2 
-          initial={{ opacity: 0, y: 20 }} 
-          whileInView={{ opacity: 1, y: 0 }} 
-          viewport={{ once: true }} 
-          className="text-5xl font-black text-toxic mb-12 uppercase tracking-tighter drop-shadow-[0_0_8px_rgba(57,255,20,0.3)]"
-        >
-          LIVE TRANSMISSIONS
-        </motion.h2>
+    <section id="live-events" className="scroll-mt-20 relative z-10 border-t border-toxic/20 bg-black/90 py-24">
+      <div className="mx-auto max-w-7xl px-4">
+        <div className="mb-10">
+          <p className="font-mono text-xs uppercase tracking-[0.25em] text-toxic">Shows and appearances</p>
+          <h2 className="mt-3 text-4xl font-black uppercase tracking-tight text-white md:text-5xl">Live Events</h2>
+        </div>
 
-        <div className="flex flex-col lg:flex-row gap-12">
-          
-          {/* THE GLOBAL RADAR (Left) */}
-          <div className="w-full lg:w-1/2 relative aspect-square sm:aspect-video lg:aspect-square bg-[#050505] border border-toxic/30 overflow-hidden flex items-center justify-center shadow-[0_0_30px_rgba(57,255,20,0.05)]">
-             {/* Radar Grid */}
-             <div className="absolute inset-0 bg-[linear-gradient(rgba(57,255,20,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(57,255,20,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-
-             {/* Sweeping Scanner */}
-             <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
-                className="absolute w-[200%] h-[200%] rounded-full border border-toxic/10 border-t-toxic/60 bg-[conic-gradient(from_0deg,transparent_0deg,rgba(57,255,20,0.2)_90deg,transparent_90deg)] origin-center"
-             />
-
-             {/* Concentric Rings */}
-             <div className="absolute w-[150px] h-[150px] sm:w-[300px] sm:h-[300px] rounded-full border border-toxic/20"></div>
-             <div className="absolute w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] rounded-full border border-toxic/10"></div>
-
-             {/* TARGET BLIP: 640 Concordia St, Knysna */}
-             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 1, 0] }}
-                transition={{ repeat: Infinity, duration: 2, delay: 0.5 }}
-                className="absolute z-20 top-[40%] left-[55%] flex flex-col items-center"
-             >
-                <div className="w-4 h-4 bg-toxic rounded-full shadow-[0_0_15px_#39ff14]"></div>
-                <div className="mt-2 border border-toxic bg-black/80 px-3 py-2 pointer-events-none">
-                   <p className="text-toxic font-mono text-[10px] tracking-widest whitespace-nowrap">TARGET LOCKED</p>
-                   <p className="text-white font-mono text-[10px] whitespace-nowrap mt-1">640 CONCORDIA ST, KNYSNA</p>
-                </div>
-             </motion.div>
-
-             {/* Radar HUD Text */}
-             <div className="absolute top-4 left-4 z-30 pointer-events-none">
-                <h3 className="text-toxic font-black tracking-widest uppercase text-xl drop-shadow-[0_0_8px_rgba(57,255,20,0.5)]">GLOBAL RADAR</h3>
-                <p className="text-white/50 font-mono text-xs mt-1">MONITORING SECTOR...</p>
-                <p className="text-white/50 font-mono text-[10px] mt-1">LAT: -34.0351 | LNG: 23.0471</p>
-             </div>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="overflow-hidden border border-toxic/30 bg-zinc-950">
+            <>
+              <iframe
+                key={`${mapCenter.latitude}-${mapCenter.longitude}`}
+                title={coordinates ? `Map showing ${selectedEvent?.venue?.name ?? "event location"}` : "Interactive map centered on Knysna, South Africa"}
+                src={mapSrc}
+                className="h-[360px] w-full border-0 sm:h-[480px]"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-toxic/20 p-4 font-mono text-xs">
+                <span className="text-zinc-300">{selectedEvent?.venue?.name ?? "Knysna, South Africa"}</span>
+                <a href={mapHref} target="_blank" rel="noopener noreferrer" className="text-toxic underline underline-offset-4">{coordinates ? "Open event map" : "Open map"}</a>
+              </div>
+              {!coordinates && <p className="px-4 pb-4 text-xs leading-relaxed text-zinc-500">{selectedEvent ? "This event has no coordinates yet; the map is centered on Knysna." : "Map centered on Knysna. Event locations will appear when the Bandsintown feed is configured."}</p>}
+            </>
           </div>
 
-          {/* GIG LISTINGS (Right) */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-center">
-            
-            {/* Archived Gig (Updated Address) */}
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }} 
-              whileInView={{ opacity: 1, x: 0 }} 
-              viewport={{ once: true }} 
-              transition={{ delay: 0.1 }} 
-              className="flex flex-col xl:flex-row justify-between items-center border border-white/10 p-8 bg-black/80 opacity-50 shadow-[0_0_15px_rgba(0,0,0,0.5)]"
-            >
-              <div className="flex gap-8 items-center mb-6 xl:mb-0 w-full xl:w-auto">
-                <div className="text-white/50 font-black text-4xl text-center">JUN<br/>20</div>
-                <div>
-                  <h3 className="text-white/50 text-2xl font-black uppercase">LOVE LIFE CENTER</h3>
-                  <p className="text-white/30 text-xs tracking-widest uppercase mt-1">640 CONCORDIA ST, KNYSNA</p>
-                </div>
+          <div className="space-y-4">
+            {loading ? (
+              <div className="border border-white/10 bg-zinc-950 p-8 text-center font-mono text-xs uppercase tracking-widest text-zinc-400">Loading event listings…</div>
+            ) : feedError || !appId ? (
+              <div className="border border-white/10 bg-zinc-950 p-8 text-center">
+                <h3 className="font-mono text-sm font-bold uppercase tracking-widest text-white">Event feed unavailable</h3>
+                <p className="mt-3 text-sm leading-relaxed text-zinc-400">{appId ? "Check the event feed connection to show upcoming dates." : "Configure the Bandsintown app ID to show upcoming dates."}</p>
               </div>
-              <button className="border border-white/30 text-white/30 px-8 py-3 tracking-widest font-bold uppercase text-sm whitespace-nowrap w-full xl:w-auto cursor-not-allowed" disabled>
-                ARCHIVED
-              </button>
-            </motion.div>
-
+            ) : events.length === 0 ? (
+              <div className="border border-white/10 bg-zinc-950 p-8 text-center">
+                <h3 className="font-mono text-sm font-bold uppercase tracking-widest text-white">No upcoming events</h3>
+                <p className="mt-3 text-sm text-zinc-400">New show dates will appear here when announced.</p>
+              </div>
+            ) : (
+              events.map((event, index) => {
+                const ticketUrl = event.offers?.find((offer) => offer.url)?.url ?? event.url;
+                const eventDate = new Date(event.datetime);
+                return (
+                  <article key={event.id ?? `${event.datetime}-${event.venue?.name ?? index}`} className={`border bg-zinc-950 p-5 transition-colors ${selectedIndex === index ? "border-toxic/70" : "border-white/10 hover:border-toxic/40"}`}>
+                    <button type="button" onClick={() => setSelectedIndex(index)} className="w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-toxic" aria-pressed={selectedIndex === index}>
+                      <span className="font-mono text-xs uppercase tracking-widest text-toxic">{eventDate.toLocaleDateString("en-ZA", { day: "2-digit", month: "short", year: "numeric" })}</span>
+                      <span className="mt-2 block text-xl font-black uppercase text-white">{event.title ?? event.venue?.name ?? "Live Event"}</span>
+                      <span className="mt-1 block text-sm text-zinc-400">{event.venue?.name}{event.venue?.city ? ` · ${event.venue.city}` : ""}{event.venue?.region ? `, ${event.venue.region}` : ""}{event.venue?.country ? ` · ${event.venue.country}` : ""}</span>
+                    </button>
+                    {ticketUrl && <a href={ticketUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex border border-toxic/50 px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-toxic hover:bg-toxic hover:text-black">Event details / tickets</a>}
+                  </article>
+                );
+              })
+            )}
           </div>
         </div>
       </div>

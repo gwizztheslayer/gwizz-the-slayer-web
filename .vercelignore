@@ -1,9 +1,17 @@
 ﻿node_modules
 .next
 .git
+.env*
 .cache
 dist
 *.mp4
 *.wav
 *.psd
 next-swc.win32-x64-msvc.node
+.vs
+.vscode
+*.vsidx
+*.backup
+token.js
+/auth-matrix
+/remove_ui.ps1

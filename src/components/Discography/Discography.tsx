@@ -1,131 +1,328 @@
-// @ts-nocheck
 "use client";
+
 import Image from "next/image";
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { useAudioStore } from "@/store/audioStore";
-import { useAudio } from "@/context/AudioContext";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { Pause, Play, ShoppingCart } from "lucide-react";
+import type { ReactNode } from "react";
+import { useAudio, type Track } from "@/context/AudioContext";
+import {
+  catalogueAlbums,
+  catalogueSingles,
+  type CatalogueAlbum,
+  type CatalogueSingle,
+} from "@/data/discography";
 
-const albums = [
-  { title: "DEMONS DON'T SLEEP", link: "https://gwizztheslayer.bandcamp.com/", img: "/images/demons.png", tracks: [{ title: "All In A Day", audio: "/audio/all in a day.mp3" }, { title: "Side Eye Ft. Acidiq Truth", audio: "/audio/side eye.mp3" }, { title: "Running Shit", audio: "/audio/running shit.mp3" }, { title: "Godly Ft. Jo Oyat & TokyoSa", audio: "/audio/godly.mp3" }, { title: "Okapi Ft. Acidiq Truth", audio: "/audio/okapi.mp3" }, { title: "Metamorphosis", audio: "/audio/metamorphosis.mp3" }, { title: "Better Things", audio: "/audio/better things.mp3" }, { title: "All In A Day (Remastered)", audio: "/audio/all in a day remaster.mp3" }, { title: "Better Things (Shankari Remix)", audio: "/audio/better things - shankari remix.mp3" }] },
-  { title: "KNYSNA'S SAVIOURS", link: "https://gwizztheslayer.bandcamp.com/", img: "/images/knysnas-saviours.png", tracks: [{ title: "Bozza", audio: "/audio/Bozza.mp3" }, { title: "IDGAF (Ft. Acidiq Truth)", audio: null, soundcloud: "https://soundcloud.com/gwizztheslayer/idgaf-ft-acidiq-truth" }, { title: "Lit", audio: null, soundcloud: "https://soundcloud.com/gwizztheslayer/lit-ft-icebergh" }, { title: "CX", audio: "/audio/CX.mp3" }, { title: "Drip", audio: "/audio/Drip.mp3" }, { title: "Escape (Ft. The Virus) [DEMO]", audio: null, soundcloud: "https://soundcloud.com/gwizztheslayer/escape" }, { title: "Drowning", audio: "/audio/Drowning.mp3" }] },
-  { title: "HEAVEN IS WHAT YOU MAKE IT AND HELL IS WHAT YOU GO THROUGH", link: "", img: "/images/heaven-hell.png", tracks: [{ title: "Dead Presidents", audio: "/audio/dead presidents.mp3" }, { title: "MIA", audio: "/audio/mia.mp3" }, { title: "Taking Over", audio: "/audio/Taking Over.mp3" }, { title: "The Massacre", audio: "/audio/The Massacre.mp3" }] },
-  { title: "LIL LAVA BABY", link: "", img: "/images/lil-lava-baby.png", tracks: [{ title: "The Vision", audio: "/audio/The Vision.mp3" }, { title: "Means Nothing", audio: "/audio/Means Nothing.mp3" }, { title: "Feeling Me Now", audio: "/audio/Feeling me now.mp3" }, { title: "Tryna Be Rude", audio: "/audio/Tryna Be Rude.mp3" }, { title: "Mr. Everywhere", audio: "/audio/mr everywhere.mp3" }, { title: "Living Life", audio: "/audio/Living life.mp3" }, { title: "Fully Equipped", audio: "/audio/fully equipped.mp3" }] },
-  { title: "I DON'T THINK IT WAS LOVE", link: "https://gwizztheslayer.bandcamp.com/", img: "/images/idontthink.png", tracks: [{ title: "Dear Peaches", audio: "/audio/Dear Peaches.mp3" }, { title: "Better Off Without", audio: "/audio/Better Off Without.mp3" }, { title: "Better Off Ft. KID KEI", audio: "/audio/Better Off.mp3" }, { title: "Dear Peaches - Clean Version", audio: "/audio/Dear Peaches - Radio Edit.mp3" }] }
-];
+type DiscographyProps = {
+  mode?: "preview" | "full";
+};
 
-const singles = [
-  { title: "Bozza", link: "https://gwizztheslayer.bandcamp.com/", img: "/images/bozza.png", audio: "/audio/Bozza.mp3" }, { title: "CX", link: "https://gwizztheslayer.bandcamp.com/track/cx-ft-acidiq-truth-icebergh-xxxceptional", img: "/images/cx.png", audio: "/audio/CX.mp3" }, { title: "Drip", link: "https://gwizztheslayer.bandcamp.com/track/drip-prod-ceoxcam88", img: "/images/drip.png", audio: "/audio/Drip.mp3" }, { title: "Drowning", link: "https://gwizztheslayer.bandcamp.com/track/drowning-ft-dash-maejor-icebergh", img: "/images/drowning.png", audio: "/audio/Drowning.mp3" }, { title: "Better Things", link: "https://gwizztheslayer.bandcamp.com/track/better-things-ft-xxxceptional-prod-ceoxcam88", img: "/images/BETTER THINGS.png", audio: "/audio/better things.mp3" }, { title: "Metamorphosis", link: "https://gwizztheslayer.bandcamp.com/track/metamorphosis-ft-hellraizer-prod-chemist", img: "/images/metamorphosis.jpg", audio: "/audio/metamorphosis.mp3" }, { title: "Okapi", link: "https://gwizztheslayer.bandcamp.com/track/okapi-ft-acidiq-truth-prod-ceoxcam88", img: "/images/Okapi.png", audio: "/audio/okapi.mp3" }, { title: "Dead Presidents", link: "https://gwizztheslayer.bandcamp.com/track/dead-presidents-rockstar-jeans", img: "/images/dead presidents.png", audio: "/audio/dead presidents.mp3" }, { title: "MIA", link: "https://gwizztheslayer.bandcamp.com/track/mia-prod-ceoxcam88", img: "/images/mia.jpg", audio: "/audio/mia.mp3" }, { title: "Taking Over", link: "https://gwizztheslayer.bandcamp.com/track/taking-over-ft-ace-mclein", img: "/images/TAking Over-min.png", audio: "/audio/Taking Over.mp3" }, { title: "Better Things (Remix)", link: "", img: "/images/better things remix.png", audio: "/audio/better things - shankari remix.mp3" }, { title: "Godly", link: "https://gwizztheslayer.bandcamp.com/track/godly-ft-jo-oyat-tokyo-sa-prod-nvsa-szn", img: "/images/godly.png", audio: "/audio/godly.mp3" }, { title: "Running Shit", link: "https://gwizztheslayer.bandcamp.com/track/running-shit", img: "/images/Running shit.png", audio: "/audio/running shit.mp3" }, { title: "All In A Day (Remaster)", link: "https://gwizztheslayer.bandcamp.com/track/all-in-a-day-remastered", img: "/images/all in a day remaster.png", audio: "/audio/all in a day remaster.mp3" }, { title: "All In A Day", link: "https://gwizztheslayer.bandcamp.com/track/all-in-a-day-prod-ceoxcam88", img: "/images/All in a day.png", audio: "/audio/all in a day.mp3" }, { title: "Dear Peaches", link: "", img: "/images/Dear Peaches.png", audio: "/audio/Dear Peaches.mp3" }, { title: "The Vision", link: "", img: "/images/The Vision.png", audio: "/audio/The Vision.mp3" }, { title: "Better Off", link: "", img: "/images/Better Off (1).png", audio: "/audio/Better Off.mp3" }
-];
+type SpotifyCatalogueTrack = {
+  id: string;
+  title: string;
+  artists: string[];
+  albumTitle: string;
+  releaseDate: string;
+  releaseDatePrecision: string;
+  durationMs: number;
+};
 
-const Lightning = () => <svg className="absolute top-2 left-2 w-8 h-8 z-50 animate-pulse drop-shadow-[0_0_8px_#39ff14]" viewBox="0 0 24 24" fill="#39ff14"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>;
+type SpotifyCatalogueResponse = { tracks?: SpotifyCatalogueTrack[] };
 
-export default function Discography() {
-  const { currentTrack, isPlaying, playTrack, togglePlayPause, audioRef } = useAudio();
-  const audioCtxRef = useRef(null);
-  const analyserRef = useRef(null);
-  const animationRef = useRef(null);
-  const setAudioData = useAudioStore((state) => state.setAudioData);
+function normalizeTrackTitle(value: string) {
+  return value
+    .toLocaleLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\b(feat(?:uring)?|ft)\.?\s+.*$/i, "")
+    .replace(/\([^)]*\)|\[[^\]]*\]/g, " ")
+    .replace(/[^a-z0-9]/g, "");
+}
 
-  useEffect(() => {
-    if (!audioRef?.current) return;
-    const initVisualizer = () => {
-      try {
-        if (!audioCtxRef.current) {
-          audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
-          analyserRef.current = audioCtxRef.current.createAnalyser();
-          analyserRef.current.fftSize = 256;
-          if (!audioRef.current._hasSource) {
-            const source = audioCtxRef.current.createMediaElementSource(audioRef.current);
-            source.connect(analyserRef.current);
-            analyserRef.current.connect(audioCtxRef.current.destination);
-            audioRef.current._hasSource = true;
-          }
-        }
-        if (audioCtxRef.current.state === 'suspended') audioCtxRef.current.resume();
-      } catch (e) { console.log("Visualizer init skipped/failed", e); }
-    };
+function findSpotifyMatch(single: CatalogueSingle, tracks: SpotifyCatalogueTrack[]) {
+  if (single.spotifyTrackId) {
+    const exactMatch = tracks.find((track) => track.id === single.spotifyTrackId);
+    if (exactMatch) return exactMatch;
+  }
 
-    const analyzeAudio = () => {
-      if (!analyserRef.current) return;
-      const bufferLength = analyserRef.current.frequencyBinCount;
-      const dataArray = new Uint8Array(bufferLength);
-      const update = () => {
-        if (isPlaying && analyserRef.current) {
-          analyserRef.current.getByteFrequencyData(dataArray);
-          const bassAverage = dataArray.slice(0, 10).reduce((a, b) => a + b, 0) / 10;
-          setAudioData(bassAverage);
-          animationRef.current = requestAnimationFrame(update);
-        }
-      };
-      update();
-    };
+  const normalizedTitle = normalizeTrackTitle(single.title);
+  if (!normalizedTitle) return undefined;
+  const matches = tracks.filter((track) => normalizeTrackTitle(track.title) === normalizedTitle);
+  if (matches.length < 2 || !single.album) return matches[0];
+  const normalizedAlbum = normalizeTrackTitle(single.album);
+  return matches.find((track) => normalizeTrackTitle(track.albumTitle).includes(normalizedAlbum)) ?? matches[0];
+}
 
-    if (isPlaying) { initVisualizer(); analyzeAudio(); } 
-    else { if (animationRef.current) cancelAnimationFrame(animationRef.current); setAudioData(0); }
-    return () => { if (animationRef.current) cancelAnimationFrame(animationRef.current); };
-  }, [isPlaying, audioRef, setAudioData]);
+function formatDuration(milliseconds: number) {
+  const seconds = Math.floor(milliseconds / 1_000);
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+}
 
-  const handleTrackClick = (trackData, img, albumTitle, albumTracksData) => {
-    if (!trackData.audio) return;
-    if (currentTrack?.url === trackData.audio) { togglePlayPause(); } 
-    else {
-      const trackToPlay = { title: trackData.title, artist: "G-Wizz, The Slayer", url: trackData.audio, cover: img, albumContext: albumTitle };
-      let playlist = [];
-      if (albumTracksData) {
-         playlist = albumTracksData.filter(t => t.audio).map(t => ({ title: t.title, artist: "G-Wizz, The Slayer", url: t.audio, cover: img, albumContext: albumTitle }));
-      }
-      playTrack(trackToPlay, playlist.length > 0 ? playlist : undefined);
-    }
-  };
+const playableCatalogueSingles: Track[] = catalogueSingles
+  .filter((single) => single.audio)
+  .map((single) => ({
+    title: single.title,
+    artist: "G-Wizz, The Slayer",
+    url: single.audio as string,
+    cover: single.cover,
+    albumContext: single.album ?? "Single",
+  }));
+
+type PreviewButtonProps = {
+  title: string;
+  audio: string | null;
+  cover: string;
+  albumContext?: string;
+  playlist?: Track[];
+  className?: string;
+  children?: ReactNode;
+};
+
+function PreviewButton({ title, audio, cover, albumContext, playlist, className, children }: PreviewButtonProps) {
+  const { currentTrack, isPlaying, playTrack, togglePlayPause } = useAudio();
+  const isCurrentTrack = Boolean(audio && currentTrack?.url === audio);
+  const playablePlaylist = playlist ?? (audio ? [{
+    title,
+    artist: "G-Wizz, The Slayer",
+    url: audio,
+    cover,
+    albumContext,
+  }] : []);
 
   return (
-    <section id="music" className="py-24 bg-black/90 relative z-10">
-      <div className="max-w-7xl mx-auto px-4">
-        <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-6xl font-black text-toxic mb-16 uppercase tracking-tighter border-b border-toxic/20 pb-4">DISCOGRAPHY</motion.h2>
+    <button
+      type="button"
+      disabled={!audio}
+      aria-label={!audio ? `Preview unavailable for ${title}` : `${isCurrentTrack && isPlaying ? "Pause" : "Play"} ${title}`}
+      onClick={() => {
+        if (!audio) return;
+        if (isCurrentTrack) togglePlayPause();
+        else playTrack(
+          { title, artist: "G-Wizz, The Slayer", url: audio, cover, albumContext },
+          playablePlaylist.length ? playablePlaylist : undefined,
+        );
+      }}
+      className={className ?? "inline-flex min-h-10 items-center gap-2 border border-toxic/50 px-3 py-2 font-mono text-[10px] font-bold uppercase tracking-wider text-toxic transition-colors hover:bg-toxic hover:text-black disabled:cursor-not-allowed disabled:border-white/10 disabled:text-white/30 disabled:hover:bg-transparent disabled:hover:text-white/30"}
+    >
+      <span aria-hidden="true" className="shrink-0">
+        {isCurrentTrack && isPlaying ? <Pause size={14} /> : <Play size={14} />}
+      </span>
+      {children ?? (!audio ? "Preview unavailable" : isCurrentTrack && isPlaying ? "Pause preview" : "Play preview")}
+    </button>
+  );
+}
 
-        <h3 className="text-2xl text-white mb-8 uppercase tracking-widest border-l-4 border-toxic pl-4">Albums</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-24">
-          {albums.map((album, i) => (
-            <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="group relative bg-black border border-white/10 p-4 hover:border-toxic/30 transition-all">
-              <div className="relative aspect-square overflow-hidden cursor-pointer" onClick={() => album.tracks[0] && handleTrackClick(album.tracks[0], album.img, album.title, album.tracks)}>
-                <Image src={album.img} alt={album.title} fill priority={i < 3} sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                {currentTrack?.url === album.tracks[0]?.audio && isPlaying && <Lightning />}
-                {album.link && (
-                  <a href={album.link} target="_blank" rel="noopener noreferrer" className="absolute top-3 right-3 bg-black/80 p-2 rounded-full border border-toxic/50 text-toxic z-30 hover:bg-toxic hover:text-black transition-colors" onClick={(e) => e.stopPropagation()}><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></a>
-                )}
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity p-4 overflow-y-auto">
-                  {album.tracks.map((t, idx) => (
-                    <button key={idx} onClick={(e) => {
-                      e.stopPropagation();
-                      if (t.audio) { handleTrackClick(t, album.img, album.title, album.tracks); }
-                      else if (t.soundcloud) { window.open(t.soundcloud, '_blank', 'noopener,noreferrer'); }
-                    }} className={`block text-xs text-left w-full font-mono py-1 truncate ${t.audio || t.soundcloud ? 'text-white hover:text-toxic cursor-pointer' : 'text-white/30 cursor-not-allowed'}`} disabled={!t.audio && !t.soundcloud}>
-                      {idx + 1}. {t.title} {!t.audio && !t.soundcloud && " (UNAVAILABLE)"} {!t.audio && t.soundcloud && " (SOUNDCLOUD)"}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <p className="mt-4 text-toxic font-bold text-sm text-center uppercase tracking-widest">{album.title}</p>
-            </motion.div>
-          ))}
+function FeatureFmCartLink({ href, releaseName }: { href: string; releaseName: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Open ${releaseName} on Feature.fm`}
+      title="Open Feature.fm"
+      className="inline-flex min-h-10 items-center gap-2 border border-toxic/50 px-3 py-2 font-mono text-[9px] font-bold uppercase tracking-widest text-toxic transition-colors hover:bg-toxic hover:text-black"
+    >
+      <ShoppingCart size={14} aria-hidden="true" />
+      <span>Get release</span>
+    </a>
+  );
+}
+
+function AlbumCard({ album, full }: { album: CatalogueAlbum; full: boolean }) {
+  const playableTracks = album.tracks.filter((track) => track.audio).map((track) => ({
+    title: track.title,
+    artist: "G-Wizz, The Slayer",
+    url: track.audio as string,
+    cover: album.cover,
+    albumContext: album.title,
+  }));
+
+  if (!full) {
+    return (
+      <article className="border border-white/10 bg-zinc-950 p-3 transition-colors hover:border-toxic/60">
+        <Link href={`/discography#album-${album.slug}`} className="group block">
+          <div className="relative aspect-square overflow-hidden">
+            <Image src={album.cover} alt={`${album.title} cover`} fill sizes="(max-width: 640px) 45vw, 300px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+          </div>
+          <div className="flex items-center justify-between gap-3 px-1 pb-1 pt-4">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-white">{album.title}</h3>
+            <span className="shrink-0 font-mono text-[10px] uppercase text-toxic">{album.tracks.length} tracks</span>
+          </div>
+        </Link>
+        {album.featureFmUrl && (
+          <div className="mt-3"><FeatureFmCartLink href={album.featureFmUrl} releaseName={album.title} /></div>
+        )}
+      </article>
+    );
+  }
+
+  return (
+    <article id={`album-${album.slug}`} className="scroll-mt-24 border border-white/10 bg-zinc-950 p-4">
+      <div className="grid gap-5 sm:grid-cols-[180px_1fr]">
+        <div className="relative aspect-square overflow-hidden border border-toxic/20 sm:sticky sm:top-24 sm:self-start">
+          <Image src={album.cover} alt={`${album.title} cover`} fill sizes="(max-width: 640px) 90vw, 180px" className="object-cover" />
+        </div>
+        <div className="min-w-0">
+          <div className="mb-4 border-b border-toxic/20 pb-3">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-toxic">Album · {album.tracks.length} tracks</p>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h3 className="mt-2 text-xl font-black uppercase tracking-wide text-white">{album.title}</h3>
+              {album.featureFmUrl && (
+                <FeatureFmCartLink href={album.featureFmUrl} releaseName={album.title} />
+              )}
+            </div>
+          </div>
+          <ol className="divide-y divide-white/10">
+            {album.tracks.map((track, index) => (
+              <li key={`${album.slug}-${track.title}`} className="flex items-center justify-between gap-3 py-2.5">
+                <PreviewButton
+                  title={track.title}
+                  audio={track.audio}
+                  cover={album.cover}
+                  albumContext={album.title}
+                  playlist={playableTracks}
+                  className="group flex min-h-10 min-w-0 flex-1 items-center gap-3 py-2 text-left text-sm text-white/80 transition-colors hover:text-toxic disabled:cursor-not-allowed disabled:text-white/40"
+                >
+                  <span className="font-mono text-[10px] text-toxic/70">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="min-w-0 truncate">{track.title}</span>
+                </PreviewButton>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function SingleCard({ single, full, spotifyTrack }: { single: CatalogueSingle; full: boolean; spotifyTrack?: SpotifyCatalogueTrack }) {
+  const duration = spotifyTrack ? formatDuration(spotifyTrack.durationMs) : single.duration;
+  const releaseDate = spotifyTrack?.releaseDate ?? single.releaseDate;
+
+  return (
+    <article className="border border-white/10 bg-zinc-950 p-3 transition-colors hover:border-toxic/50">
+      <div>
+        <div className="relative aspect-square overflow-hidden">
+          <PreviewButton
+            title={single.title}
+            audio={single.audio}
+            cover={single.cover}
+            albumContext={single.album ?? "Single"}
+            playlist={playableCatalogueSingles}
+            className="group absolute inset-0 block h-full w-full text-left disabled:cursor-not-allowed"
+          >
+            <Image src={single.cover} alt={`${single.title} cover`} fill sizes="(max-width: 640px) 45vw, 240px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+            <span aria-hidden="true" className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover:bg-black/30">
+              <span className="flex h-12 w-12 items-center justify-center rounded-full border border-toxic bg-black/85 text-toxic opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+                {single.audio ? <Play size={20} fill="currentColor" /> : <span className="px-2 text-center font-mono text-[8px] uppercase">Preview unavailable</span>}
+              </span>
+            </span>
+          </PreviewButton>
+          <Link href={`/discography/${single.slug}`} className="absolute bottom-2 left-2 z-10 border border-toxic/60 bg-black/90 px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-toxic">
+            View track details
+          </Link>
+        </div>
+        <h3 className="mt-3">
+          <PreviewButton
+            title={single.title}
+            audio={single.audio}
+            cover={single.cover}
+            albumContext={single.album ?? "Single"}
+            playlist={playableCatalogueSingles}
+            className="group flex min-h-8 w-full items-center justify-center gap-2 text-center text-xs font-bold uppercase tracking-widest text-white transition-colors hover:text-toxic disabled:cursor-not-allowed disabled:text-white/40"
+          >
+            <span className="truncate text-center">{single.title}</span>
+          </PreviewButton>
+        </h3>
+      </div>
+      <div className="mt-3 border-t border-white/10 pt-3">
+        {full && <p className="mb-2 truncate font-mono text-[9px] uppercase text-white/45">{single.album ?? "Single"}</p>}
+        <div className="flex flex-wrap items-center gap-2">
+          {single.featureFmUrl && <FeatureFmCartLink href={single.featureFmUrl} releaseName={single.title} />}
+        </div>
+      </div>
+      {full && (duration || releaseDate) && (
+        <p className="mt-2 font-mono text-[9px] uppercase tracking-wider text-white/45">
+          {duration ? `Duration ${duration}` : ""}{duration && releaseDate ? " · " : ""}{releaseDate ? `Released ${releaseDate}` : ""}
+        </p>
+      )}
+    </article>
+  );
+}
+
+export default function Discography({ mode = "preview" }: DiscographyProps) {
+  const full = mode === "full";
+  const [spotifyTracks, setSpotifyTracks] = useState<SpotifyCatalogueTrack[]>([]);
+
+  useEffect(() => {
+    if (!full) return;
+    const controller = new AbortController();
+
+    fetch("/api/spotify/catalogue", { signal: controller.signal, cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) return null;
+        return response.json() as Promise<SpotifyCatalogueResponse>;
+      })
+      .then((result) => {
+        if (result?.tracks) setSpotifyTracks(result.tracks);
+      })
+      .catch(() => undefined);
+
+    return () => controller.abort();
+  }, [full]);
+
+  const albums = full ? catalogueAlbums : catalogueAlbums.slice(0, 3);
+  const singles = full ? catalogueSingles : catalogueSingles.slice(0, 4);
+
+  return (
+    <section id="music" className={`relative z-10 bg-black/90 ${full ? "pb-12 pt-28" : "py-20"}`}>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-4 border-b border-toxic/20 pb-4">
+          <div>
+            <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.28em] text-toxic">Dreams Of Colour · Release archive</p>
+            <h2 className="text-4xl font-black uppercase tracking-tighter text-white sm:text-6xl">Discography</h2>
+          </div>
+          {!full && (
+            <Link href="/discography" className="inline-flex min-h-11 items-center border border-toxic px-5 py-3 font-mono text-xs font-bold uppercase tracking-widest text-toxic transition-colors hover:bg-toxic hover:text-black">
+              Open full catalogue <span aria-hidden="true" className="ml-2">→</span>
+            </Link>
+          )}
         </div>
 
-        <h3 className="text-2xl text-white mb-8 uppercase tracking-widest border-l-4 border-toxic pl-4">Singles</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {singles.map((single, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: (i % 5) * 0.1 }} className="group relative bg-black border border-white/10 p-3 hover:border-toxic transition-all">
-              <div className="relative aspect-square overflow-hidden cursor-pointer" onClick={() => handleTrackClick(single, single.img, "Single")}>
-                <Image src={single.img} alt={single.title} fill priority={i < 5} sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw" className="object-cover transition-transform group-hover:scale-105" />
-                {currentTrack?.url === single.audio && isPlaying && <Lightning />}
-                {single.link && (
-                  <a href={single.link} target="_blank" rel="noopener noreferrer" className="absolute top-2 right-2 bg-black/80 p-2 rounded-full border border-toxic/50 text-toxic z-30 hover:bg-toxic hover:text-black transition-colors" onClick={(e) => e.stopPropagation()}><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg></a>
-                )}
-              </div>
-              <p className="mt-3 text-white text-[10px] text-center uppercase tracking-widest truncate">{single.title}</p>
-            </motion.div>
-          ))}
-        </div>
+        <section aria-labelledby="album-catalogue-heading" className="mb-16">
+          <div className="mb-5 flex items-center justify-between gap-3">
+            <h3 id="album-catalogue-heading" className="border-l-4 border-toxic pl-3 text-xl font-bold uppercase tracking-widest text-white">Albums</h3>
+            {!full && <span className="font-mono text-[10px] uppercase text-white/45">Featured releases</span>}
+          </div>
+          <div className={full ? "grid gap-5 lg:grid-cols-2" : "grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6"}>
+            {albums.map((album) => <AlbumCard key={album.slug} album={album} full={full} />)}
+          </div>
+        </section>
+
+        <section aria-labelledby="singles-catalogue-heading">
+          <div className="mb-5 flex items-center justify-between gap-3">
+            <h3 id="singles-catalogue-heading" className="border-l-4 border-toxic pl-3 text-xl font-bold uppercase tracking-widest text-white">Singles</h3>
+            {!full && <span className="font-mono text-[10px] uppercase text-white/45">Latest and selected tracks</span>}
+          </div>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {singles.map((single) => (
+              <SingleCard
+                key={single.slug}
+                single={single}
+                full={full}
+                spotifyTrack={findSpotifyMatch(single, spotifyTracks)}
+              />
+            ))}
+          </div>
+        </section>
+
+        {!full && (
+          <div className="mt-10 flex justify-center">
+            <Link href="/discography" className="inline-flex min-h-11 items-center border border-toxic/50 px-6 py-3 font-mono text-xs font-bold uppercase tracking-widest text-toxic transition-colors hover:bg-toxic hover:text-black">
+              View all albums and singles
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -13,14 +13,6 @@ body {
   color: #ffffff;
 }
 
-::-webkit-scrollbar {
-  display: none;
-}
-* {
-  -ms-overflow-style: none;  
-  scrollbar-width: none;  
-}
-
 ::selection {
   background-color: var(--color-toxic);
   color: var(--color-void);
@@ -36,8 +28,6 @@ body {
 @layer base {
   html, body {
     -webkit-tap-highlight-color: transparent;
-    overscroll-behavior-y: none;
-    touch-action: pan-x pan-y;
   }
 }
 
@@ -61,4 +51,19 @@ body {
 }
 .animate-aura-pulse {
   animation: auraPulse 2.5s infinite cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* --- DREAMS OF COLOUR CINEMATIC ENGINE --- */
+.cinematic-bg {
+  background-color: #000000;
+  background-image: radial-gradient(circle at center, #111111 0%, #000000 100%);
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

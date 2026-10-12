@@ -23,6 +23,10 @@
 # misc
 .DS_Store
 *.pem
+*.backup
+token.js
+/auth-matrix/
+/remove_ui.ps1
 
 # debug
 npm-debug.log*
@@ -42,3 +46,10 @@ next-env.d.ts
 
 .vercel
 .env*
+node_modules/
+.next/
+.env
+.env.*
+!.env.example
+.vercel/
+.vs/

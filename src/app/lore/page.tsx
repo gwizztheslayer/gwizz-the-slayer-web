@@ -1,6 +1,6 @@
-﻿import React from 'react';
+import React from 'react';
 import { createClient } from 'next-sanity';
-import imageUrlBuilder from '@sanity/image-url';
+import { createImageUrlBuilder } from '@sanity/image-url';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -11,7 +11,7 @@ const client = createClient({
   useCdn: false 
 });
 
-const builder = imageUrlBuilder(client);
+const builder = createImageUrlBuilder(client);
 function urlFor(source: any) { return builder.image(source); }
 
 export default async function LorePage() {
@@ -26,7 +26,7 @@ export default async function LorePage() {
         <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-widest mb-2">
           THE <span className="text-toxic aura-toxic-text">LORE</span>
         </h1>
-        <h2 className="text-sm md:text-base text-zinc-500 mb-16 uppercase tracking-widest">
+        <h2 className="text-sm md:text-base text-zinc-400 mb-16 uppercase tracking-widest">
           KNYSNA'S SAVIOUR // OFFICIAL MANGA ARCHIVE
         </h2>
 
@@ -66,3 +66,6 @@ export default async function LorePage() {
     </div>
   );
 }
+
+
+

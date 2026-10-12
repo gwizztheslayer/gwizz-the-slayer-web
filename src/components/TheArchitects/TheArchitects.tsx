@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 export default function TheArchitects() {
   const members = [
@@ -34,7 +34,7 @@ export default function TheArchitects() {
               <h3 className="text-xl font-black text-white uppercase tracking-widest mb-1 group-hover:text-toxic transition-colors">
                 {member.name}
               </h3>
-              <p className="text-xs text-white/50 tracking-widest uppercase border-t border-toxic/20 pt-2 mt-2">
+              <p className="text-xs text-zinc-400 tracking-widest uppercase border-t border-toxic/20 pt-2 mt-2">
                 {member.role}
               </p>
             </div>

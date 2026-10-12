@@ -39,7 +39,7 @@ export default function Chat() {
         <div className="w-80 h-96 bg-[#050505] border border-toxic/30 mb-4 flex flex-col shadow-[0_0_20px_rgba(57,255,20,0.1)] overflow-hidden">
           <div className="bg-void border-b border-toxic/20 p-4 flex justify-between items-center">
             <h3 className="text-toxic font-black tracking-widest text-xs uppercase">Syndicate Comms</h3>
-            <button onClick={() => setIsOpen(false)} className="text-white/50 hover:text-toxic">
+            <button onClick={() => setIsOpen(false)} className="text-zinc-400 hover:text-toxic">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
           </div>
@@ -62,7 +62,7 @@ export default function Chat() {
               onChange={(e) => setMessage(e.target.value)}
               placeholder="ENTER SECURE COMM..." 
               disabled={status === "loading"}
-              className="bg-black border border-white/20 p-2 text-white font-mono text-xs w-full focus:outline-none focus:border-toxic disabled:opacity-50"
+              className="bg-black border border-white/40 p-2 text-white font-mono text-xs w-full focus:outline-none focus:border-toxic disabled:opacity-50"
             />
             <button type="submit" disabled={status === "loading"} className="bg-toxic text-black px-3 font-black tracking-widest text-xs hover:bg-white transition-colors disabled:opacity-50">
               {status === "loading" ? "..." : ">"}

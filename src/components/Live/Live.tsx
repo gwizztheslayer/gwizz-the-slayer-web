@@ -20,7 +20,7 @@ export default function Live() {
                 <span className="text-3xl font-black text-toxic w-24">{show.date}</span>
                 <div>
                   <h3 className="text-2xl font-bold text-white uppercase tracking-wide">{show.venue}</h3>
-                  <div className="flex items-center gap-2 text-white/50 mt-1">
+                  <div className="flex items-center gap-2 text-zinc-400 mt-1">
                     <MapPin className="w-4 h-4" />
                     <span className="tracking-widest uppercase text-sm">{show.city}</span>
                   </div>

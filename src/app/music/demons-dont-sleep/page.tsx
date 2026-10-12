@@ -58,7 +58,7 @@ export default function DemonsDontSleepPage() {
               priority 
             /> 
           */}
-          <div className="p-8 text-zinc-500">
+          <div className="p-8 text-zinc-400">
             [Insert Next/Image Component Here]
           </div>
         </div>

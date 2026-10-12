@@ -1,143 +1,102 @@
-﻿"use client";
-import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+"use client";
 
-// You will replace these src paths with your actual .mp3 or .wav files inside public/audio/
-const playlist = [
-  { id: "01", title: "DEMONS DON'T SLEEP", artist: "G-WIZZ", src: "/audio/ambient-loop.mp3" },
-  { id: "02", title: "TAKING OVER", artist: "G-WIZZ FT. ICEBERGH", src: "/audio/ambient-loop.mp3" },
-  { id: "03", title: "KNYSNA SAVIOUR", artist: "G-WIZZ", src: "/audio/ambient-loop.mp3" }
-];
+import { useAudio } from "@/context/AudioContext";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export default function AuraPlayer() {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [currentTrack, setCurrentTrack] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const { currentTrack, isPlaying, togglePlayPause, audioRef } = useAudio();
   const [progress, setProgress] = useState(0);
-
-  const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  const nextTrack = () => {
-    setCurrentTrack((prev) => (prev === playlist.length - 1 ? 0 : prev + 1));
-    setIsPlaying(true);
-  };
-
-  const prevTrack = () => {
-    setCurrentTrack((prev) => (prev === 0 ? playlist.length - 1 : prev - 1));
-    setIsPlaying(true);
-  };
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (isPlaying && audioRef.current) {
-      audioRef.current.play().catch(() => setIsPlaying(false));
-    }
-  }, [currentTrack]);
+    const audio = audioRef.current;
+    if (!audio) return;
 
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      const current = audioRef.current.currentTime;
-      const duration = audioRef.current.duration;
-      setProgress((current / duration) * 100 || 0);
-    }
-  };
+    const updateProgress = () => {
+      setProgress((audio.currentTime / audio.duration) * 100 || 0);
+    };
 
-  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (audioRef.current) {
-      const seekTime = (Number(e.target.value) / 100) * audioRef.current.duration;
-      audioRef.current.currentTime = seekTime;
-      setProgress(Number(e.target.value));
-    }
-  };
+    audio.addEventListener("timeupdate", updateProgress);
+    return () => audio.removeEventListener("timeupdate", updateProgress);
+  }, [audioRef]);
 
+  if (pathname === "/avc") return null;
+
+  // The 'fixed' classes here guarantee it is ALWAYS visible on the screen, floating at the bottom, zero scrolling required.
   return (
-    <section className="w-full py-16 bg-black border-y border-zinc-900 relative overflow-hidden font-mono">
-      {/* Background Grid & Blur */}
-      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-32 bg-toxic/5 blur-[100px] pointer-events-none"></div>
-
-      <div className="max-w-4xl mx-auto px-4 relative z-10">
-        <div className="flex flex-col items-center justify-center text-center mb-10">
-          <div className="text-toxic font-bold tracking-[0.4em] text-[10px] mb-2 uppercase animate-pulse">
-            // AURA_ALPHA_TEST_v0.1
-          </div>
-          <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-[0.2em]">
-            AURA <span className="text-zinc-600">ENGINE</span>
-          </h2>
+    <div className="fixed bottom-0 md:bottom-6 left-0 md:left-1/2 md:-translate-x-1/2 w-full md:w-[90%] max-w-4xl z-[9999]">
+      <div className="bg-black/95 backdrop-blur-xl border-t md:border border-toxic/50 shadow-[0_0_30px_rgba(57,255,20,0.2)] md:rounded-[16px] flex flex-col md:flex-row items-center p-3 sm:px-6 h-[90px] md:h-20 overflow-hidden">
+        
+        {/* Progress Bar */}
+        <div className="absolute top-0 left-0 w-full h-1 bg-zinc-900 md:rounded-t-[16px]">
+          <div
+            className="h-full bg-toxic shadow-[0_0_10px_rgba(57,255,20,1)] transition-all duration-100 ease-linear md:rounded-tl-[16px]"
+            style={{ width: `${progress}%` }}
+          />
         </div>
 
-        <div className="bg-zinc-950 border border-zinc-900 shadow-[0_0_40px_rgba(0,0,0,0.8)] p-6 md:p-10 flex flex-col md:flex-row gap-8 items-center">
-          
-          {/* Audio Element (Hidden) */}
-          <audio 
-            ref={audioRef} 
-            src={playlist[currentTrack].src} 
-            onTimeUpdate={handleTimeUpdate}
-            onEnded={nextTrack}
+        {/* Track Info */}
+        <div className="flex items-center w-full md:w-1/3 mb-2 md:mb-0 h-full">
+          {currentTrack?.cover ? (
+            <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 relative border border-toxic/40 mr-3 shadow-[0_0_10px_rgba(57,255,20,0.2)]">
+              <Image src={currentTrack.cover} alt={`${currentTrack.title} Cover`} fill className="object-cover" sizes="48px" />
+            </div>
+          ) : (
+            <div className="w-10 h-10 md:w-12 md:h-12 shrink-0 relative border border-toxic/20 mr-3 bg-zinc-950 flex items-center justify-center">
+               <span className="text-[6px] text-toxic/50 tracking-widest font-mono">IDLE</span>
+            </div>
+          )}
+          <div className="flex flex-col overflow-hidden w-full">
+            <span className="text-white font-black text-xs md:text-sm uppercase truncate leading-tight drop-shadow-md">
+              {currentTrack ? currentTrack.title : "SYSTEM IDLE"}
+            </span>
+            <span className="text-toxic font-mono text-[9px] md:text-[10px] tracking-[0.2em] uppercase truncate mt-1">
+              {currentTrack ? currentTrack.artist : "AWAITING AUDIO INPUT"}
+            </span>
+          </div>
+        </div>
+
+        {/* Playback Controls */}
+        <div className="flex justify-center items-center w-full md:w-1/3 h-full">
+          <button
+            onClick={togglePlayPause}
+            aria-label="Play or Pause Track"
+            disabled={!currentTrack}
+            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all border-2 ${currentTrack ? 'bg-toxic border-toxic text-black shadow-[0_0_20px_rgba(57,255,20,0.5)] hover:scale-105' : 'bg-transparent border-zinc-800 text-zinc-700 cursor-not-allowed'}`}
+          >
+            {isPlaying ? (
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        {/* Volume & Aux */}
+        <div className="hidden md:flex justify-end items-center w-1/3 gap-4 text-toxic/80 h-full pr-2">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5 10H2v4h3l4 4V6l-4 4z" />
+          </svg>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            aria-label="Volume Control"
+            defaultValue="1"
+            onChange={(e) => {
+              if (audioRef.current) audioRef.current.volume = parseFloat(e.target.value);
+            }}
+            className="w-20 h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-toxic"
           />
-
-          {/* Track Info Display */}
-          <div className="flex-1 w-full text-center md:text-left space-y-2">
-            <div className="text-zinc-500 text-[10px] tracking-widest uppercase">
-              TRACK {playlist[currentTrack].id} OF 0{playlist.length}
-            </div>
-            <motion.div 
-              key={currentTrack}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="text-2xl md:text-3xl font-black text-white uppercase tracking-widest"
-            >
-              {playlist[currentTrack].title}
-            </motion.div>
-            <div className="text-toxic text-xs tracking-[0.3em] font-bold">
-              {playlist[currentTrack].artist}
-            </div>
-          </div>
-
-          {/* Controls & Progress */}
-          <div className="w-full md:w-1/2 flex flex-col gap-6">
-            
-            {/* Scrubber */}
-            <div className="w-full flex items-center gap-4">
-              <input 
-                type="range" 
-                min="0" 
-                max="100" 
-                value={progress} 
-                onChange={handleSeek}
-                className="w-full h-1 bg-zinc-900 appearance-none cursor-pointer accent-toxic"
-              />
-            </div>
-
-            {/* Transport Buttons */}
-            <div className="flex items-center justify-center md:justify-end gap-6">
-              <button onClick={prevTrack} className="text-zinc-500 hover:text-white text-xs tracking-widest uppercase transition-colors">
-                [ &lt;&lt; ]
-              </button>
-              
-              <button 
-                onClick={togglePlay} 
-                className="border border-toxic text-toxic hover:bg-toxic hover:text-black px-8 py-3 text-xs font-bold tracking-[0.2em] uppercase transition-all shadow-[0_0_15px_rgba(57,255,20,0.1)]"
-              >
-                {isPlaying ? "[ PAUSE ]" : "[ STREAM ]"}
-              </button>
-
-              <button onClick={nextTrack} className="text-zinc-500 hover:text-white text-xs tracking-widest uppercase transition-colors">
-                [ &gt;&gt; ]
-              </button>
-            </div>
-          </div>
-
         </div>
       </div>
-    </section>
+    </div>
   );
 }

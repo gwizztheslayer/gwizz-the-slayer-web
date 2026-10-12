@@ -1,16 +1,31 @@
-﻿"use client";
+"use client";
 import { motion } from "framer-motion";
+import IframeFacade from "@/components/IframeFacade/IframeFacade";
+import { useEffect, useState } from "react";
 
 export default function Visuals() {
-  const videos = [
-    { title: "THE VISION", id: "TTGkmpgsLvM" },
-    { title: "MEANS NOTHING", id: "JVFgXkb6QeQ" },
-    { title: "MIA", id: "v-FKJKfcQ_o" },
-    { title: "TAKING OVER", id: "eEUILyakJqA" }
+  const fallbackVideos = [
+    { title: "CAN DO ANYTHING", id: "K9jWBnbFFW4" },
+    { title: "CLASSIFIED TRANSMISSION", id: "15ms5t_rSE0" },
+    { title: "CLASSIFIED TRANSMISSION", id: "grOed-_aJ4I" },
+    { title: "CLASSIFIED TRANSMISSION", id: "hOxbUBvEzzc" }
   ];
+  const [videos, setVideos] = useState(fallbackVideos);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/youtube", { signal: controller.signal })
+      .then((response) => response.ok ? response.json() : Promise.reject(new Error("Video feed unavailable")))
+      .then((data: { videos?: { id?: string; title?: string }[] }) => {
+        const latest = data.videos?.filter((video): video is { id: string; title: string } => Boolean(video.id && video.title && /^[\w-]{11}$/.test(video.id)));
+        if (latest?.length) setVideos(latest);
+      })
+      .catch(() => undefined);
+    return () => controller.abort();
+  }, []);
   
   return (
-    <section id="videos" className="py-24 bg-black/60 relative z-10">
+    <section id="visuals" className="scroll-mt-20 border-y border-toxic/30 py-24 bg-black/60 relative z-10">
       <div className="max-w-7xl mx-auto px-4">
         <motion.h2 
           initial={{ opacity: 0, x: -20 }} 
@@ -21,7 +36,7 @@ export default function Visuals() {
           VISUALS
         </motion.h2>
 
-        {/* FEATURED TRANSMISSION: BETTY BOOP GOOGLE DRIVE EMBED */}
+        {/* FEATURED GOOGLE DRIVE EMBED */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }} 
           whileInView={{ opacity: 1, y: 0 }} 
@@ -36,30 +51,16 @@ export default function Visuals() {
             </div>
           </div>
           
-          {/* SIZING FIX: aspect-video (16:9) matches Image 2 and gives the Drive UI enough room so it doesn't crush the video */}
-          <div className="relative w-full aspect-video bg-black">
-            <iframe 
-              src="https://drive.google.com/file/d/1T4g1HitxceZnGPcA35UfhFjeQ7VziAKg/preview" 
-              className="absolute top-0 left-0 w-full h-full border-0"
-              allow="autoplay" 
-              allowFullScreen
-              loading="lazy"
-              title="G-Wizz, The Slayer - Taking Over Ft. Ace Mclein (music video)"
-              aria-label="G-Wizz, The Slayer - Taking Over Ft. Ace Mclein (music video)"
-            ></iframe>
-          </div>
-          
-          <div className="p-4 md:p-6 border-t border-toxic/20 bg-black">
-            <h3 className="text-toxic font-black uppercase tracking-widest text-lg md:text-xl">
-              G-Wizz, The Slayer - Taking Over Ft. Ace Mclein (music video)
-            </h3>
-            <p className="text-zinc-500 text-[10px] md:text-xs uppercase tracking-[0.2em] mt-2 font-mono">
-              [ ARCHIVE FOOTAGE: BETTY BOOP "RED HOT MAMMA" (1934) ] // PUBLIC DOMAIN ASSET ACQUIRED
-            </p>
+          <div className="relative w-full aspect-video bg-black flex">
+            <IframeFacade 
+              title="G-Wizz, The Slayer - Taking Over Ft. Ace Mclein"
+              src="https://drive.google.com/file/d/1T4g1HitxceZnGPcA35UfhFjeQ7VziAKg/preview"
+              provider="SECURE_DRIVE"
+            />
           </div>
         </motion.div>
 
-        {/* ARCHIVED YOUTUBE TRANSMISSIONS GRID */}
+        <p className="mb-6 font-mono text-xs uppercase tracking-widest text-zinc-500">Featured videos from the G-Wizz, The Slayer YouTube channel</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {videos.map((vid, i) => (
             <motion.div 
@@ -68,20 +69,16 @@ export default function Visuals() {
               whileInView={{ opacity: 1, y: 0 }} 
               viewport={{ once: true }} 
               transition={{ delay: i * 0.2 }}
-              className="aspect-video bg-black border border-white/10 flex items-center justify-center relative overflow-hidden group shadow-[0_0_15px_rgba(57,255,20,0.05)]"
+              className="aspect-video bg-black border border-white/10 flex items-center justify-center relative overflow-hidden group shadow-[0_0_15px_rgba(57,255,20,0.05)] rounded-[12px]"
             >
-              <iframe 
-                className="w-full h-full absolute inset-0 opacity-80 group-hover:opacity-100 transition-opacity duration-500" 
-                src={`https://www.youtube.com/embed/${vid.id}?modestbranding=1&rel=0`} 
-                title={`${vid.title} - G-Wizz The Slayer`} 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowFullScreen 
-                loading="lazy"
-              ></iframe>
+              <IframeFacade 
+                title={`${vid.title} - G-Wizz The Slayer`}
+                src={`https://www.youtube.com/embed/${vid.id}?modestbranding=1&rel=0`}
+                provider="YOUTUBE"
+              />
             </motion.div>
           ))}
         </div>
-        
       </div>
     </section>
   );

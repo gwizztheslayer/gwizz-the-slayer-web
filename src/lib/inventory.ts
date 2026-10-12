@@ -1,64 +1,42 @@
-﻿export const inventory = [
-  // --- PHYSICAL SUPPLY ---
-  { 
-    id: "metamorphosis-tee", 
-    name: "METAMORPHOSIS TEE", 
+export const inventory = [
+  {
+    id: "metamorphosis-tee",
+    name: "METAMORPHOSIS TEE",
     type: "physical",
-    priceUSD: "22", 
-    priceETH: "0.006",
     image: "/images/metamorphosis-tee.png",
-    stripeLink: "https://buy.stripe.com/test_cNi14g5MR2Ma2yA9Tj53O00",
-    paypalLink: "REPLACE_WITH_PAYPAL_URL",
     previewUrl: null,
-    description: "Premium heavyweight cotton. The official Metamorphosis visual drop. Limited run.",
+    description: "The Metamorphosis visual drop.",
   },
-  { 
-    id: "taking-over-tee", 
-    name: "TAKING OVER T-SHIRT", 
+  {
+    id: "taking-over-tee",
+    name: "TAKING OVER T-SHIRT",
     type: "physical",
-    priceUSD: "22", 
-    priceETH: "0.006",
     image: "/images/taking-over-tee.png",
-    stripeLink: "https://buy.stripe.com/test_eVqfZa4IN3Qe5KM7Lb53O01",
-    paypalLink: "REPLACE_WITH_PAYPAL_URL",
     previewUrl: null,
-    description: "Taking Over. Secure the official apparel. Global shipping available.",
+    description: "Taking Over artwork on official apparel.",
   },
-  // --- DIGITAL ASSETS ---
-  { 
-    id: "discography-24-25", 
-    name: "G-WIZZ THE SLAYER DISCOGRAPHY 2024-25", 
+  {
+    id: "discography-24-25",
+    name: "G-WIZZ THE SLAYER DISCOGRAPHY 2024-25",
     type: "digital",
-    priceUSD: "50", 
-    priceETH: "0.015",
     image: "/icon.png",
-    stripeLink: "https://buy.stripe.com/test_6oU14gdfj0E2ehi0iJ53O0a",
-    paypalLink: "https://drive.google.com/file/d/1Nt676h4Q5eX4R_7choBd8zHkryowynFo/view?usp=sharing",
     previewUrl: null,
-    description: "The complete encrypted audio vault. Includes Demons Don't Sleep and all standalone singles.",
+    description: "A digital collection featuring Demons Don't Sleep and standalone releases.",
   },
-  { 
-    id: "slayer-drums-v1", 
-    name: "SLAYER DRUMS V1", 
+  {
+    id: "slayer-drums-v1",
+    name: "SLAYER DRUMS V1",
     type: "digital",
-    priceUSD: "25", 
-    priceETH: "0.007",
     image: "/icon.png",
-    stripeLink: "https://buy.stripe.com/test_9B63cogrv0E2c9aaXn53O0b",
-    paypalLink: "REPLACE_WITH_PAYPAL_URL",
     previewUrl: "/audio/preview-drums.mp3",
-    description: "Heavy-hitting modern trap frequencies. The exact 808s and snares used by G-Wizz, The Slayer.",
+    description: "A collection of modern trap drum sounds.",
   },
-  { 
-    id: "comic-digital", 
-    name: "KNYSNA'S SAVIOURS: ISSUE 1 (PDF)", 
+  {
+    id: "comic-digital",
+    name: "KNYSNA'S SAVIOURS: ISSUE 1 (PDF)",
     type: "digital",
-    priceUSD: "10", 
-    priceETH: "0.003",
     image: "/comic/knysna-saviour-cover.png",
-    stripeLink: "https://buy.stripe.com/test_3cIfZacbf5Ym2yA2qR53O09",
-    paypalLink: "REPLACE_WITH_PAYPAL_URL",
     previewUrl: null,
-    description: "The official digital manga. Dive into the underground lore of Dreams of Colour.",
-  }
-];
+    description: "The first issue of Knysna's Saviour.",
+  },
+] as const;

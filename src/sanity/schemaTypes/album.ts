@@ -16,8 +16,8 @@ export default {
       options: { hotspot: true } 
     },
     { 
-      name: 'bandcampLink', 
-      title: 'Bandcamp Link (Optional)', 
+      name: 'featureFmLink',
+      title: 'Feature.fm Link (Optional)',
       type: 'url' 
     },
     { 

@@ -56,7 +56,7 @@ export default function GlobalPlayer() {
         </div>
         <div className="truncate">
           <h4 className="text-toxic font-bold text-sm truncate">{currentTrack.title}</h4>
-          <p className="text-white/50 text-[10px] tracking-widest uppercase">G-WIZZ, THE SLAYER</p>
+          <p className="text-zinc-400 text-[10px] tracking-widest uppercase">G-WIZZ, THE SLAYER</p>
         </div>
       </div>
 
