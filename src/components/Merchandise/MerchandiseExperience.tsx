@@ -3,42 +3,15 @@ import { useState } from "react";
 import Image from "next/image";
 
 const MERCH_INVENTORY = [
-  {
-    id: "m-001",
-    name: "SYNDICATE HEAVYWEIGHT HOODIE",
-    price: "R 850",
-    description: "Premium 400gsm cotton. Toxic green embroidered logo on chest.",
-    src: "/images/merch-placeholder-1.jpg",
-    status: "AVAILABLE",
-    sizes: ["S", "M", "L", "XL", "XXL"]
-  },
-  {
-    id: "m-002",
-    name: "SMOKED OUT HALO TEE",
-    price: "R 450",
-    description: "Acid wash vintage tee featuring the Smoked Out Halo painting.",
-    src: "/images/merch-placeholder-2.jpg",
-    status: "LOW STOCK",
-    sizes: ["M", "L", "XL"]
-  },
-  {
-    id: "m-003",
-    name: "DEMONS DON'T SLEEP CAP",
-    price: "R 350",
-    description: "Distressed dad hat. Metal clasp. Embroidered lettering.",
-    src: "/images/merch-placeholder-3.jpg",
-    status: "SOLD OUT",
-    sizes: ["OSFA"]
-  },
-  {
-    id: "m-004",
-    name: "K.A.I.R.O. TACTICAL VEST",
-    price: "R 1200",
-    description: "Limited edition utility vest. 6 pockets. Syndicate woven label.",
-    src: "/images/merch-placeholder-4.jpg",
-    status: "PRE-ORDER",
-    sizes: ["M", "L", "XL"]
-  }
+  { id: "m-001", name: "SMOKED OUT HALO HOODIE", price: "R 850", description: "Heavyweight black cotton blend. Front graphic.", src: "/merch/halo-hoodie.jpg", status: "AVAILABLE", sizes: ["S", "M", "L", "XL", "XXL"] },
+  { id: "m-002", name: "APOCALYPTIC VISION HOODIE", price: "R 850", description: "Premium grey pullover. Features the 6-eyed entity.", src: "/merch/apoc-hoodie.jpg", status: "AVAILABLE", sizes: ["S", "M", "L", "XL", "XXL"] },
+  { id: "m-003", name: "NO F#CKS GIVEN TEE", price: "R 450", description: "Black streetwear tee. 100% combed cotton.", src: "/merch/nfg-tee.jpg", status: "AVAILABLE", sizes: ["M", "L", "XL"] },
+  { id: "m-004", name: "THE GREY STARE TEE", price: "R 450", description: "Black classic fit tee with vivid green entity portrait.", src: "/merch/stare-tee.jpg", status: "AVAILABLE", sizes: ["M", "L", "XL"] },
+  { id: "m-005", name: "VOLCANIC VISION TEE", price: "R 450", description: "White graphic tee featuring volcanic landscape.", src: "/merch/volcanic-tee.jpg", status: "LOW STOCK", sizes: ["M", "L"] },
+  { id: "m-006", name: "THE SPECIMEN TEE", price: "R 450", description: "White tee. High-contrast red and grey alien portrait.", src: "/merch/specimen-tee.jpg", status: "AVAILABLE", sizes: ["S", "M", "L", "XL"] },
+  { id: "m-007", name: "PLANET WALK TEE", price: "R 450", description: "Navy blue aesthetic tee. Red entity on blue planet.", src: "/merch/planet-tee.jpg", status: "AVAILABLE", sizes: ["M", "L", "XL"] },
+  { id: "m-008", name: "ABDUCTION PROTOCOL MUG", price: "R 200", description: "Black ceramic mug. Wraparound UFO graphic.", src: "/merch/abduction-mug.jpg", status: "AVAILABLE", sizes: ["OSFA"] },
+  { id: "m-009", name: "APOCALYPTIC VISION CASE", price: "R 300", description: "Tough phone case with glossy graphic finish.", src: "/merch/apoc-case.jpg", status: "PRE-ORDER", sizes: ["iPhone 13", "iPhone 14", "iPhone 15", "Galaxy S23"] }
 ];
 
 export default function MerchandiseExperience() {
@@ -63,7 +36,7 @@ export default function MerchandiseExperience() {
         </div>
 
         {/* MERCH GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {MERCH_INVENTORY.map((item) => (
             <div key={item.id} className="group flex flex-col border border-white/10 bg-[#050505] transition-all duration-500 hover:border-toxic/60 relative">
               <div className="absolute top-4 right-4 z-20">
@@ -77,6 +50,7 @@ export default function MerchandiseExperience() {
               </div>
 
               <div className="relative aspect-square w-full overflow-hidden bg-zinc-900 border-b border-white/5">
+                <Image src={item.src} alt={item.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105 z-10" />
                  <div className="absolute inset-0 flex items-center justify-center text-zinc-800 font-mono text-xs z-0">
                     [ AWAITING IMAGE ASSET ]
                  </div>
@@ -87,7 +61,7 @@ export default function MerchandiseExperience() {
                   <h2 className="text-lg font-black uppercase tracking-wide leading-tight text-white group-hover:text-toxic transition-colors pr-4">
                     {item.name}
                   </h2>
-                  <span className="font-mono text-sm text-zinc-300 whitespace-nowrap">{item.price}</span>
+                  <span className="font-mono text-sm text-toxic whitespace-nowrap">{item.price}</span>
                 </div>
                 <p className="text-xs text-zinc-500 mb-6 flex-grow">{item.description}</p>
 
@@ -116,7 +90,7 @@ export default function MerchandiseExperience() {
                             ? 'bg-white text-black hover:bg-toxic border border-transparent' 
                             : 'bg-zinc-900 text-zinc-600 border border-zinc-800 cursor-not-allowed'}`}
                       >
-                        {selectedSizes[item.id] ? '[ ACQUIRE ]' : 'SELECT SIZE'}
+                        {selectedSizes[item.id] ? '[ ADD TO CART ]' : 'SELECT SIZE'}
                       </button>
                     </div>
                   ) : (
