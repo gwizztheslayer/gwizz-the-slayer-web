@@ -1,3 +1,4 @@
+import HomeMerchSection from '@/components/Home/HomeMerchSection';
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
@@ -119,6 +120,7 @@ export default function Home() {
       
           {/* Anti-collision spacer */}
       <div className="w-full h-[120px] pointer-events-none" />
-    </main>
+      <HomeMerchSection />
+      </main>
   );
 }
