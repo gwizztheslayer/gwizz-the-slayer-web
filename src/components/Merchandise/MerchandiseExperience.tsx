@@ -33,36 +33,43 @@ export default function MerchandiseExperience() {
     <main className="min-h-screen bg-black text-white pt-24 pb-32">
       <section className="mx-auto max-w-7xl px-4">
         
-        {/* HEADER & CROSS-LINK */}
-        <div className="flex flex-col items-center justify-center mb-16 text-center">
+        {/* HEADER (Cleaned up, no buttons) */}
+        <div className="flex flex-col items-center justify-center mb-12 text-center">
           <span className="text-toxic font-mono text-xs tracking-[0.3em] uppercase mb-4">[ Authorized Personnel Only ]</span>
           <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-[0.2em] mb-4">
             The Supply <span className="text-toxic">Depot</span>
           </h1>
-          <p className="text-white/50 text-sm md:text-base tracking-widest max-w-2xl mb-8">
+          <p className="text-white/50 text-sm md:text-base tracking-widest max-w-2xl">
             Official Syndicate uniform and artifacts. Limited production runs.
           </p>
-          
-          <Link href="/physical-work" className="inline-flex w-fit items-center border border-toxic px-6 py-3 text-toxic font-mono text-xs font-bold tracking-widest uppercase transition-colors hover:bg-toxic hover:text-black">
-            Enter Physical Vault
-          </Link>
         </div>
 
         {/* UI FILTER TABS */}
-        <div className="flex items-center justify-center gap-2 md:gap-4 border-b border-white/10 pb-6 mb-10 overflow-x-auto">
+        <div className="flex items-center justify-center gap-1 md:gap-4 border-b border-white/10 pb-0 mb-10 overflow-x-auto scrollbar-hide">
           {CATEGORIES.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 font-mono text-xs uppercase tracking-widest transition-all ${
+              className={`px-4 py-3 font-mono text-[10px] md:text-xs uppercase tracking-widest transition-all mb-[-1px] ${
                 activeTab === tab 
                   ? "text-toxic border-b-2 border-toxic bg-toxic/5" 
-                  : "text-zinc-500 hover:text-zinc-300"
+                  : "text-zinc-500 hover:text-zinc-300 border-b-2 border-transparent"
               }`}
             >
               {tab}
             </button>
           ))}
+          
+          {/* Subtle separator */}
+          <span className="text-white/20 mx-2">|</span>
+
+          {/* Cross-Link disguised as a Tab */}
+          <Link
+            href="/physical-work"
+            className="px-4 py-3 font-mono text-[10px] md:text-xs uppercase tracking-widest text-zinc-500 hover:text-white border-b-2 border-transparent transition-all flex items-center gap-2 mb-[-1px]"
+          >
+            PHYSICAL VAULT <span className="text-[10px]">↗</span>
+          </Link>
         </div>
 
         {/* MERCH GRID */}
