@@ -54,6 +54,8 @@ const artistJsonLd = {
   ],
 };
 
+import GlobalPlayer from "@/components/GlobalPlayer/GlobalPlayer";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="bg-black">
@@ -70,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SpeedInsights />
         <KairoWidget />
         {process.env.NEXT_PUBLIC_GA_ID && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />}
+        <GlobalPlayer />
       </body>
     </html>
   );

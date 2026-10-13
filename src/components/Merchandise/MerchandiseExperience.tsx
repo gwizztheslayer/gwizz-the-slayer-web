@@ -1,43 +1,73 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const MERCH_INVENTORY = [
-  { id: "m-001", name: "SMOKED OUT HALO HOODIE", price: "R 850", description: "Heavyweight black cotton blend. Front graphic.", src: "/merch/halo-hoodie.jpg", status: "AVAILABLE", sizes: ["S", "M", "L", "XL", "XXL"] },
-  { id: "m-002", name: "APOCALYPTIC VISION HOODIE", price: "R 850", description: "Premium grey pullover. Features the 6-eyed entity.", src: "/merch/apoc-hoodie.jpg", status: "AVAILABLE", sizes: ["S", "M", "L", "XL", "XXL"] },
-  { id: "m-003", name: "NO F#CKS GIVEN TEE", price: "R 450", description: "Black streetwear tee. 100% combed cotton.", src: "/merch/nfg-tee.jpg", status: "AVAILABLE", sizes: ["M", "L", "XL"] },
-  { id: "m-004", name: "THE GREY STARE TEE", price: "R 450", description: "Black classic fit tee with vivid green entity portrait.", src: "/merch/stare-tee.jpg", status: "AVAILABLE", sizes: ["M", "L", "XL"] },
-  { id: "m-005", name: "VOLCANIC VISION TEE", price: "R 450", description: "White graphic tee featuring volcanic landscape.", src: "/merch/volcanic-tee.jpg", status: "LOW STOCK", sizes: ["M", "L"] },
-  { id: "m-006", name: "THE SPECIMEN TEE", price: "R 450", description: "White tee. High-contrast red and grey alien portrait.", src: "/merch/specimen-tee.jpg", status: "AVAILABLE", sizes: ["S", "M", "L", "XL"] },
-  { id: "m-007", name: "PLANET WALK TEE", price: "R 450", description: "Navy blue aesthetic tee. Red entity on blue planet.", src: "/merch/planet-tee.jpg", status: "AVAILABLE", sizes: ["M", "L", "XL"] },
-  { id: "m-008", name: "ABDUCTION PROTOCOL MUG", price: "R 200", description: "Black ceramic mug. Wraparound UFO graphic.", src: "/merch/abduction-mug.jpg", status: "AVAILABLE", sizes: ["OSFA"] },
-  { id: "m-009", name: "APOCALYPTIC VISION CASE", price: "R 300", description: "Tough phone case with glossy graphic finish.", src: "/merch/apoc-case.jpg", status: "PRE-ORDER", sizes: ["iPhone 13", "iPhone 14", "iPhone 15", "Galaxy S23"] }
+  { id: "m-001", name: "SMOKED OUT HALO HOODIE", price: "R 850", description: "Heavyweight black cotton blend. Front graphic.", src: "/merch/halo-hoodie.jpg", status: "AVAILABLE", category: "APPAREL", sizes: ["S", "M", "L", "XL", "XXL"] },
+  { id: "m-002", name: "APOCALYPTIC VISION HOODIE", price: "R 850", description: "Premium grey pullover. Features the 6-eyed entity.", src: "/merch/apoc-hoodie.jpg", status: "AVAILABLE", category: "APPAREL", sizes: ["S", "M", "L", "XL", "XXL"] },
+  { id: "m-003", name: "NO F#CKS GIVEN TEE", price: "R 450", description: "Black streetwear tee. 100% combed cotton.", src: "/merch/nfg-tee.jpg", status: "AVAILABLE", category: "APPAREL", sizes: ["M", "L", "XL"] },
+  { id: "m-004", name: "THE GREY STARE TEE", price: "R 450", description: "Black classic fit tee with vivid green entity portrait.", src: "/merch/stare-tee.jpg", status: "AVAILABLE", category: "APPAREL", sizes: ["M", "L", "XL"] },
+  { id: "m-005", name: "VOLCANIC VISION TEE", price: "R 450", description: "White graphic tee featuring volcanic landscape.", src: "/merch/volcanic-tee.jpg", status: "LOW STOCK", category: "APPAREL", sizes: ["M", "L"] },
+  { id: "m-006", name: "THE SPECIMEN TEE", price: "R 450", description: "White tee. High-contrast red and grey alien portrait.", src: "/merch/specimen-tee.jpg", status: "AVAILABLE", category: "APPAREL", sizes: ["S", "M", "L", "XL"] },
+  { id: "m-007", name: "PLANET WALK TEE", price: "R 450", description: "Navy blue aesthetic tee. Red entity on blue planet.", src: "/merch/planet-tee.jpg", status: "AVAILABLE", category: "APPAREL", sizes: ["M", "L", "XL"] },
+  { id: "m-008", name: "ABDUCTION PROTOCOL MUG", price: "R 200", description: "Black ceramic mug. Wraparound UFO graphic.", src: "/merch/abduction-mug.jpg", status: "AVAILABLE", category: "ACCESSORIES", sizes: ["OSFA"] },
+  { id: "m-009", name: "APOCALYPTIC VISION CASE", price: "R 300", description: "Tough phone case with glossy graphic finish.", src: "/merch/apoc-case.jpg", status: "PRE-ORDER", category: "ACCESSORIES", sizes: ["iPhone 13", "14", "15", "Galaxy S23"] }
 ];
+
+const CATEGORIES = ["ALL", "APPAREL", "ACCESSORIES"];
 
 export default function MerchandiseExperience() {
   const [selectedSizes, setSelectedSizes] = useState<Record<string, string>>({});
+  const [activeTab, setActiveTab] = useState("ALL");
 
   const handleSizeSelect = (itemId: string, size: string) => {
     setSelectedSizes(prev => ({ ...prev, [itemId]: size }));
   };
 
+  const filteredInventory = MERCH_INVENTORY.filter(item => 
+    activeTab === "ALL" || item.category === activeTab
+  );
+
   return (
-    <main className="min-h-screen bg-black text-white pt-24 pb-24">
+    <main className="min-h-screen bg-black text-white pt-24 pb-32">
       <section className="mx-auto max-w-7xl px-4">
-        {/* HEADER */}
-        <div className="flex flex-col items-center justify-center mb-12 text-center">
+        
+        {/* HEADER & CROSS-LINK */}
+        <div className="flex flex-col items-center justify-center mb-16 text-center">
           <span className="text-toxic font-mono text-xs tracking-[0.3em] uppercase mb-4">[ Authorized Personnel Only ]</span>
           <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-[0.2em] mb-4">
             The Supply <span className="text-toxic">Depot</span>
           </h1>
-          <p className="text-white/50 text-sm md:text-base tracking-widest max-w-2xl">
+          <p className="text-white/50 text-sm md:text-base tracking-widest max-w-2xl mb-8">
             Official Syndicate uniform and artifacts. Limited production runs.
           </p>
+          
+          <Link href="/physical-work" className="inline-flex w-fit items-center border border-toxic px-6 py-3 text-toxic font-mono text-xs font-bold tracking-widest uppercase transition-colors hover:bg-toxic hover:text-black">
+            Enter Physical Vault
+          </Link>
+        </div>
+
+        {/* UI FILTER TABS */}
+        <div className="flex items-center justify-center gap-2 md:gap-4 border-b border-white/10 pb-6 mb-10 overflow-x-auto">
+          {CATEGORIES.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 font-mono text-xs uppercase tracking-widest transition-all ${
+                activeTab === tab 
+                  ? "text-toxic border-b-2 border-toxic bg-toxic/5" 
+                  : "text-zinc-500 hover:text-zinc-300"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
 
         {/* MERCH GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {MERCH_INVENTORY.map((item) => (
+          {filteredInventory.map((item) => (
             <div key={item.id} className="group flex flex-col border border-white/10 bg-[#050505] transition-all duration-500 hover:border-toxic/60 relative">
               <div className="absolute top-4 right-4 z-20">
                 <span className={`px-3 py-1 font-mono text-[10px] uppercase tracking-widest border bg-black/90 backdrop-blur-md
@@ -52,7 +82,7 @@ export default function MerchandiseExperience() {
               <div className="relative aspect-square w-full overflow-hidden bg-zinc-900 border-b border-white/5">
                 <Image src={item.src} alt={item.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105 z-10" />
                  <div className="absolute inset-0 flex items-center justify-center text-zinc-800 font-mono text-xs z-0">
-                    [ AWAITING IMAGE ASSET ]
+                    [ LOADING ]
                  </div>
               </div>
 
