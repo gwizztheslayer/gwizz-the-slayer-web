@@ -1,4 +1,4 @@
-import HomeMerchSection from '@/components/Home/HomeMerchSection';
+﻿import HomeMerchSection from '@/components/Home/HomeMerchSection';
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
@@ -85,6 +85,7 @@ export default function Home() {
             <Link href="/discography" className="min-w-36 border border-toxic bg-toxic px-6 py-4 font-bold uppercase tracking-widest text-black transition-colors hover:bg-transparent hover:text-toxic">Listen</Link>
             <Link href="/visuals" className="min-w-36 border border-toxic/50 px-6 py-4 font-bold uppercase tracking-widest text-toxic transition-colors hover:bg-toxic hover:text-black">Watch</Link>
             <Link href="/contact" className="min-w-36 border border-white/20 px-6 py-4 font-bold uppercase tracking-widest text-white transition-colors hover:border-toxic hover:text-toxic">Book</Link>
+            <a href="https://ar.gwizztheslayer.co.za" target="_blank" rel="noopener noreferrer" className="min-w-36 border border-purple-500/50 px-6 py-4 font-bold uppercase tracking-widest text-purple-400 transition-colors hover:bg-purple-500 hover:text-white">Enter AR</a>
           </div>
         </div>
       </section>
