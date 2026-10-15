@@ -1,4 +1,4 @@
-import MerchandiseExperience from "@/components/Merchandise/MerchandiseExperience";
+﻿import MerchandiseExperience from "@/components/Merchandise/MerchandiseExperience";
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
