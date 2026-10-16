@@ -1,4 +1,4 @@
-import "./globals.css";
+﻿import "./globals.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Space_Grotesk } from "next/font/google";
 import { LazyMotion, domAnimation } from "framer-motion";
@@ -15,14 +15,14 @@ const mainFont = Space_Grotesk({ subsets: ["latin"], display: "swap" });
 
 export const metadata = {
   metadataBase: new URL("https://www.gwizztheslayer.co.za"),
-  title: "G-Wizz, The Slayer",
-  description: "The official site for G-Wizz, The Slayer: music, original artwork, comics, videos, articles, and live events from Knysna, South Africa.",
-  keywords: ["G-Wizz The Slayer", "Modern Trap", "Knysna Music", "South African Rap", "Knysna's Saviour", "Dreams Of Colour"],
+  title: "G-Wizz, The Slayer | Audio, Art, Apparel & Software",
+  description: "The digital hub of G-Wizz, The Slayer. Discover self-produced rap and hip-hop, physical canvas paintings, official clothing drops, and custom web applications built from Knysna, South Africa.",
+  keywords: ["G-Wizz The Slayer", "Audio, Art, Apparel & Software", "Knysna Music", "South African Rap", "Knysna's Saviour", "Dreams Of Colour"],
   verification: { other: { "p:domain_verify": "64694b793816c01bce092bf33f4e5710" } },
   icons: { icon: "/icon.png", apple: "/icon.png" },
   openGraph: {
-    title: "G-Wizz, The Slayer | Official Site",
-    description: "Music, artwork, comics, videos, and events from G-Wizz, The Slayer.",
+    title: "G-Wizz, The Slayer | Audio, Art, Apparel & Software",
+    description: "The digital hub of G-Wizz, The Slayer. Discover self-produced rap and hip-hop, physical canvas paintings, official clothing drops, and custom web applications built from Knysna, South Africa.",
     url: "https://www.gwizztheslayer.co.za",
     siteName: "G-Wizz, The Slayer",
     images: [{ url: "/comic/knysna-saviour-cover.png", width: 1200, height: 630, alt: "Knysna's Saviour comic cover" }],
@@ -31,8 +31,8 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "G-Wizz, The Slayer",
-    description: "Music, artwork, comics, videos, and events from Knysna, South Africa.",
+    title: "G-Wizz, The Slayer | Audio, Art, Apparel & Software",
+    description: "The digital hub of G-Wizz, The Slayer. Discover self-produced rap and hip-hop, physical canvas paintings, official clothing drops, and custom web applications built from Knysna, South Africa.",
     images: ["/comic/knysna-saviour-cover.png"],
   },
 };
@@ -43,7 +43,7 @@ const artistJsonLd = {
   name: "G-Wizz, The Slayer",
   url: "https://www.gwizztheslayer.co.za",
   image: "https://www.gwizztheslayer.co.za/images/slayer-photo.jpg",
-  genre: ["Trap", "Hip-Hop", "Modern Trap"],
+  genre: ["Trap", "Hip-Hop", "Audio, Art, Apparel & Software"],
   origin: { "@type": "Place", name: "Knysna, South Africa" },
   sameAs: [
     "https://open.spotify.com/artist/1GM9nGfwFjiwZtgIWO3sh2",
@@ -74,3 +74,4 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
+
