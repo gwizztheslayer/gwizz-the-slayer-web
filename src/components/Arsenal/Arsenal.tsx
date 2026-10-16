@@ -3,19 +3,19 @@ import Image from "next/image";
 import Link from "next/link";
 
 const APPAREL_DROPS = [
-  { id: "m-001", name: "SMOKED OUT HALO HOODIE", price: "R 850", src: "/merch/stare-tee.jpg" },
-  { id: "m-002", name: "APOCALYPTIC VISION HOODIE", price: "R 850", src: "/merch/volcanic-tee.jpg" },
+  { id: "m-001", name: "SMOKED OUT HALO HOODIE", price: "R 850", src: "/merch/halo-hoodie.jpg" },
+  { id: "m-002", name: "APOCALYPTIC VISION HOODIE", price: "R 850", src: "/merch/apoc-hoodie.jpg" },
   { id: "m-003", name: "NO F#CKS GIVEN TEE", price: "R 450", src: "/merch/nfg-tee.jpg" },
   { id: "m-004", name: "SYNDICATE RED EYE HOODIE", price: "R 850", src: "/merch/planet-tee.jpg" },
   { id: "m-005", name: "GREEN ALIEN PORTRAIT TEE", price: "R 450", src: "/merch/specimen-tee.jpg" }
 ];
 
 const PHYSICAL_ASSETS = [
-  { id: "p-001", name: "KNYSNA'S SAVIOUR (DELUXE VINYL + COMIC)", price: "R 650", src: "/merch/stare-tee.jpg", status: "PRE-ORDER" }
+  { id: "p-001", name: "KNYSNA'S SAVIOUR (DELUXE VINYL + COMIC)", price: "R 650", src: "/images/knysna-saviour-cover.jpg", status: "PRE-ORDER" }
 ];
 
 const DIGITAL_ASSETS = [
-  { id: "d-001", name: "DEMONS DON'T SLEEP (MASTER STEMS)", price: "R 300", type: "AUDIO", status: "AVAILABLE" },
+  { id: "d-001", name: "DEMONS DON'T SLEEP (MASTER STEMS)", price: "R 300", type: "AUDIO", src: "/images/demons.jpg", status: "AVAILABLE" },
   { id: "d-002", name: "SYNDICATE UI ASSET & FONT PACK", price: "R 200", type: "ASSETS", status: "AVAILABLE" }
 ];
 
@@ -78,7 +78,13 @@ export default function Arsenal() {
             {PHYSICAL_ASSETS.map((item) => (
               <Link href="/merchandise" key={item.id} className="group flex items-center gap-6 border border-white/10 bg-[#050505] p-4 transition-all duration-500 hover:border-toxic/60">
                 <div className="relative h-24 w-24 flex-shrink-0 bg-zinc-900 overflow-hidden border border-white/5">
-                  <Image src={item.src} alt={item.name} fill sizes="96px" className="object-cover group-hover:scale-105 transition-transform" />
+                  {item.src ? (
+                    <Image src={item.src} alt={item.name} fill sizes="96px" className="object-cover group-hover:scale-105 transition-transform" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-zinc-600 font-mono text-xs tracking-widest">[{item.type}]</span>
+                    </div>
+                  )}
                 </div>
                 <div className="flex flex-col flex-grow">
                   <span className="text-toxic font-mono text-[10px] tracking-widest mb-1">{item.status}</span>
@@ -99,8 +105,12 @@ export default function Arsenal() {
           <div className="grid grid-cols-1 gap-6">
             {DIGITAL_ASSETS.map((item) => (
               <Link href="/merchandise" key={item.id} className="group flex items-center gap-6 border border-white/10 bg-[#050505] p-4 transition-all duration-500 hover:border-toxic/60">
-                <div className="h-24 w-24 flex-shrink-0 bg-zinc-900 border border-white/5 flex items-center justify-center">
-                  <span className="text-zinc-600 font-mono text-xs tracking-widest">[{item.type}]</span>
+                <div className="relative h-24 w-24 flex-shrink-0 bg-zinc-900 border border-white/5 flex items-center justify-center overflow-hidden">
+                  {item.src ? (
+                    <Image src={item.src} alt={item.name} fill sizes="96px" className="object-cover group-hover:scale-105 transition-transform" />
+                  ) : (
+                    <span className="text-zinc-600 font-mono text-xs tracking-widest">[{item.type}]</span>
+                  )}
                 </div>
                 <div className="flex flex-col flex-grow">
                   <span className="text-toxic font-mono text-[10px] tracking-widest mb-1">{item.status}</span>
