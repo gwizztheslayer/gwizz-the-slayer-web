@@ -1,67 +1,63 @@
-"use client";
-
+﻿"use client";
 import Image from "next/image";
 import Link from "next/link";
-import { inventory } from "@/lib/inventory";
-import { useAudio } from "@/context/AudioContext";
+
+const FEATURED_MERCH = [
+  { id: "m-001", name: "SMOKED OUT HALO HOODIE", price: "R 850", src: "/merch/halo-hoodie.jpg" },
+  { id: "m-002", name: "APOCALYPTIC VISION HOODIE", price: "R 850", src: "/merch/apoc-hoodie.jpg" },
+  { id: "m-003", name: "NO F#CKS GIVEN TEE", price: "R 450", src: "/merch/nfg-tee.jpg" }
+];
 
 export default function Arsenal() {
-  const { playTrack, currentTrack, isPlaying, togglePlayPause } = useAudio();
-  const physicalDrops = inventory.filter((item) => item.type === "physical");
-  const digitalDrops = inventory.filter((item) => item.type === "digital");
-
-  const handlePreview = (item: (typeof inventory)[number]) => {
-    if (!item.previewUrl) return;
-    const trackInfo = { title: `${item.name} (PREVIEW)`, artist: "G-Wizz, The Slayer", url: item.previewUrl, cover: item.image };
-    if (currentTrack?.title === trackInfo.title) togglePlayPause();
-    else playTrack(trackInfo, [trackInfo]);
-  };
-
-  const renderGrid = (items: readonly (typeof inventory)[number][]) => (
-    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-      {items.map((item) => (
-        <article key={item.id} className="group flex flex-col border border-zinc-900/50 bg-zinc-950/70 p-4 transition-colors hover:border-toxic/40">
-          <div className="relative mb-6 flex aspect-square w-full items-center justify-center overflow-hidden border border-zinc-900 bg-black p-4">
-            <Image src={item.image} alt={item.name} fill className="object-contain p-4 transition-transform duration-500 group-hover:scale-105" />
-          </div>
-          <h3 className="text-xl font-bold uppercase tracking-wide text-zinc-200">{item.name}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-zinc-400">{item.description}</p>
-
-          {item.previewUrl && (
-            <button onClick={() => handlePreview(item)} className="mt-6 w-full border border-zinc-800 py-4 font-mono text-xs font-bold uppercase tracking-widest text-zinc-300 transition-colors hover:border-toxic hover:text-toxic">
-              {currentTrack?.title === `${item.name} (PREVIEW)` && isPlaying ? "Pause preview" : "Play audio preview"}
-            </button>
-          )}
-          <div className="mt-auto pt-6">
-            <p className="border border-white/10 p-4 text-center font-mono text-[10px] leading-relaxed tracking-wider text-zinc-400">
-              SALES AND CHECKOUT ARE NOT OPEN YET.
-            </p>
-            <Link href="/contact" className="mt-3 block w-full border border-toxic/50 py-3 text-center font-mono text-[10px] font-bold uppercase tracking-widest text-toxic transition-colors hover:bg-toxic hover:text-black">
-              Ask about availability
-            </Link>
-          </div>
-        </article>
-      ))}
-    </div>
-  );
-
   return (
-    <section id="merchandise" className="scroll-mt-20 relative z-20 w-full border-y border-toxic/30 bg-black px-6 py-24 font-mono">
-      <div className="mx-auto flex max-w-6xl flex-col gap-14">
-        <header className="text-center">
-          <h2 className="text-5xl font-black uppercase tracking-tighter text-toxic md:text-7xl">Merchandise</h2>
-          <p className="mt-4 text-xs uppercase tracking-widest text-white/70">Apparel and digital releases from G-Wizz, The Slayer</p>
-          <p className="mx-auto mt-5 max-w-2xl text-sm leading-relaxed text-zinc-400">The catalogue is here for browsing. Online orders will open once live payment, shipping, and return details are ready.</p>
-        </header>
+    <section className="mx-auto max-w-7xl px-4 py-16">
+      
+      {/* HEADER - PERFECTLY MATCHING DISCOGRAPHY LAYOUT */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-4 mb-8">
         <div>
-          <h3 className="mb-8 border-b border-toxic/30 pb-2 text-xl font-black uppercase tracking-widest text-white">Physical Work</h3>
-          {renderGrid(physicalDrops)}
+          <span className="text-toxic font-mono text-[10px] tracking-widest uppercase mb-2 block">
+            OFFICIAL SYNDICATE UNIFORM
+          </span>
+          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tight">
+            MERCHANDISE
+          </h2>
         </div>
-        <div>
-          <h3 className="mb-8 border-b border-toxic/30 pb-2 text-xl font-black uppercase tracking-widest text-white">Digital Releases</h3>
-          {renderGrid(digitalDrops)}
-        </div>
+        <Link 
+          href="/merchandise" 
+          className="mt-6 md:mt-0 inline-flex items-center border border-toxic px-6 py-2 text-toxic font-mono text-xs font-bold tracking-widest uppercase transition-colors hover:bg-toxic hover:text-black whitespace-nowrap"
+        >
+          ENTER FULL VAULT &rarr;
+        </Link>
       </div>
+
+      {/* SUB-SECTION DIVIDER */}
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-1 h-5 bg-toxic"></div>
+        <h3 className="font-black text-white tracking-widest uppercase text-lg">LATEST DROPS</h3>
+      </div>
+
+      {/* MERCH PREVIEW GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {FEATURED_MERCH.map((item) => (
+          <Link href="/merchandise" key={item.id} className="group flex flex-col border border-white/10 bg-[#050505] transition-all duration-500 hover:border-toxic/60 relative cursor-pointer">
+            <div className="relative aspect-square w-full overflow-hidden bg-zinc-900 border-b border-white/5">
+              <Image src={item.src} alt={item.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105 z-10" />
+              <div className="absolute inset-0 flex items-center justify-center text-zinc-800 font-mono text-xs z-0">
+                [ LOADING ]
+              </div>
+            </div>
+            <div className="p-5 flex flex-col">
+              <div className="flex justify-between items-start">
+                <h3 className="text-lg font-black uppercase tracking-wide leading-tight text-white group-hover:text-toxic transition-colors pr-4">
+                  {item.name}
+                </h3>
+                <span className="font-mono text-sm text-toxic whitespace-nowrap">{item.price}</span>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+
     </section>
   );
 }

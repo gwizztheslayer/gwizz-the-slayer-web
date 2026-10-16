@@ -1,5 +1,4 @@
-﻿import HomeMerchSection from '@/components/Home/HomeMerchSection';
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
 import dynamic from "next/dynamic";
@@ -8,8 +7,8 @@ import Discography from "@/components/Discography/Discography";
 import ComicBookSection from "@/components/ComicBookSection";
 import { ARTIST_PROFILE } from "@/data/artist";
 import Network from "@/components/Network/Network";
-
 import MarketOracle from "@/components/Oracle/MarketOracle";
+import { Metadata } from 'next';
 
 const Visuals = dynamic(() => import("@/components/Visuals/Visuals"), { loading: () => <div className="w-full max-w-6xl mx-auto min-h-[400px] border border-toxic/10 bg-black flex items-center justify-center font-mono text-xs text-toxic/40 animate-pulse">[ INITIATING VISUAL FEED... ]</div> });
 const CanvasVault = dynamic(() => import("@/components/CanvasVault/CanvasVault"), { loading: () => <div className="w-full max-w-6xl mx-auto min-h-[400px] border border-toxic/10 bg-black flex items-center justify-center font-mono text-xs text-toxic/40 animate-pulse">[ ACCESSING PHYSICAL CANVAS VAULT... ]</div> });
@@ -21,11 +20,9 @@ const ContactForm = dynamic(() => import("@/components/ContactForm/ContactForm")
 const Support = dynamic(() => import("@/components/Support/Support"));
 const LyricsSector = dynamic(() => import("@/components/LyricsSector/LyricsSector"), { loading: () => <div className="w-full max-w-6xl mx-auto min-h-[400px] border border-toxic/10 bg-black flex items-center justify-center font-mono text-xs text-toxic/40 animate-pulse">[ INITIATING LYRICS ENGINE... ]</div> });
 
-import { Metadata } from 'next';
-
 export const metadata: Metadata = {
-  title: "G-Wizz, The Slayer | Music, Art, Comics & Events",
-  description: "Explore music, original artwork, Knysna's Saviour, videos, articles, and live events from G-Wizz, The Slayer.",
+  title: "G-Wizz, The Slayer | Audio, Art, Apparel & Software",
+  description: "The digital hub of G-Wizz, The Slayer. Discover self-produced rap and hip-hop, physical canvas paintings, official clothing drops, and custom web applications built from Knysna, South Africa.",
   keywords: ["G-Wizz The Slayer", "modern trap music", "Knysna rap", "South African trap", "Knysna's Saviour", "urban-industrial rap", "Aura Venture Coin"],
   openGraph: {
     title: "G-Wizz, The Slayer | Official Hub",
@@ -96,6 +93,8 @@ export default function Home() {
       <Visuals />
       <Transmissions />
       <LiveTransmissions />
+      
+      {/* Consolidated Merchandise Section */}
       <Arsenal />
 
       <About />
@@ -119,9 +118,8 @@ export default function Home() {
       
       <AuraPlayer />
       
-          {/* Anti-collision spacer */}
+      {/* Anti-collision spacer for Aura Player */}
       <div className="w-full h-[120px] pointer-events-none" />
-      <HomeMerchSection />
-      </main>
+    </main>
   );
 }
