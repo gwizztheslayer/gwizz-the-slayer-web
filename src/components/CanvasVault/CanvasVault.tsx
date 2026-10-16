@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { FEATURED_ARTWORK_IDS, GALLERY_ARTWORKS } from "@/data/gallery-artworks";
 
@@ -13,7 +13,7 @@ export default function CanvasVault() {
         <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-toxic font-mono text-xs tracking-[0.25em] uppercase mb-3">Original artwork</p>
-            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-[0.12em]">Physical Work</h2>
+            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-[0.12em]">PAINTINGS</h2>
           </div>
           <Link href="/gallery" className="inline-flex w-fit items-center border border-toxic px-5 py-3 text-toxic font-mono text-xs font-bold tracking-widest uppercase transition-colors hover:bg-toxic hover:text-black">
             Enter Full Gallery
@@ -39,3 +39,4 @@ export default function CanvasVault() {
     </section>
   );
 }
+

@@ -15,7 +15,7 @@ const MENU_CATEGORIES = [
   {
     title: "PHYSICAL ASSETS",
     links: [
-      { name: "PHYSICAL WORK", path: "/physical-work" },
+      { name: "PAINTINGS", path: "/physical-work" },
       { name: "FULL GALLERY", path: "/gallery" },
       { name: "SUPPLY DEPOT (MERCH)", path: "/merchandise" }
     ]
@@ -107,3 +107,4 @@ export default function TerminalOverlay() {
     </>
   );
 }
+

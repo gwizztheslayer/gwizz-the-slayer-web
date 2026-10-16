@@ -1,21 +1,21 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 const MERCH_INVENTORY = [
   // RESTORED ORIGINAL CATALOGUE
-  { id: "legacy-1", name: "ENTITY CLUSTER TEE", price: "R 450", description: "White tee with classic entity graphic.", src: "/images/merch-placeholder-1.jpg", status: "AVAILABLE", category: "PHYSICAL WORK", sizes: ["S", "M", "L", "XL"] },
-  { id: "legacy-2", name: "NEON YOUTH TEE", price: "R 450", description: "Black tee featuring neon youth portrait.", src: "/images/merch-placeholder-2.jpg", status: "AVAILABLE", category: "PHYSICAL WORK", sizes: ["M", "L", "XL"] },
+  { id: "legacy-1", name: "ENTITY CLUSTER TEE", price: "R 450", description: "White tee with classic entity graphic.", src: "/images/merch-placeholder-1.jpg", status: "AVAILABLE", category: "PAINTINGS", sizes: ["S", "M", "L", "XL"] },
+  { id: "legacy-2", name: "NEON YOUTH TEE", price: "R 450", description: "Black tee featuring neon youth portrait.", src: "/images/merch-placeholder-2.jpg", status: "AVAILABLE", category: "PAINTINGS", sizes: ["M", "L", "XL"] },
   
   // NEW SYNDICATE DROP
-  { id: "m-001", name: "SMOKED OUT HALO HOODIE", price: "R 850", description: "Heavyweight black cotton blend. Front graphic.", src: "/merch/halo-hoodie.jpg", status: "AVAILABLE", category: "PHYSICAL WORK", sizes: ["S", "M", "L", "XL", "XXL"] },
-  { id: "m-002", name: "APOCALYPTIC VISION HOODIE", price: "R 850", description: "Premium grey pullover. Features the 6-eyed entity.", src: "/merch/apoc-hoodie.jpg", status: "AVAILABLE", category: "PHYSICAL WORK", sizes: ["S", "M", "L", "XL", "XXL"] },
-  { id: "m-003", name: "NO F#CKS GIVEN TEE", price: "R 450", description: "Black streetwear tee. 100% combed cotton.", src: "/merch/nfg-tee.jpg", status: "AVAILABLE", category: "PHYSICAL WORK", sizes: ["M", "L", "XL"] },
-  { id: "m-004", name: "THE GREY STARE TEE", price: "R 450", description: "Black classic fit tee with vivid green entity portrait.", src: "/merch/stare-tee.jpg", status: "AVAILABLE", category: "PHYSICAL WORK", sizes: ["M", "L", "XL"] },
-  { id: "m-005", name: "VOLCANIC VISION TEE", price: "R 450", description: "White graphic tee featuring volcanic landscape.", src: "/merch/volcanic-tee.jpg", status: "LOW STOCK", category: "PHYSICAL WORK", sizes: ["M", "L"] },
-  { id: "m-006", name: "THE SPECIMEN TEE", price: "R 450", description: "White tee. High-contrast red and grey alien portrait.", src: "/merch/specimen-tee.jpg", status: "AVAILABLE", category: "PHYSICAL WORK", sizes: ["S", "M", "L", "XL"] },
-  { id: "m-007", name: "PLANET WALK TEE", price: "R 450", description: "Navy blue aesthetic tee. Red entity on blue planet.", src: "/merch/planet-tee.jpg", status: "AVAILABLE", category: "PHYSICAL WORK", sizes: ["M", "L", "XL"] },
+  { id: "m-001", name: "SMOKED OUT HALO HOODIE", price: "R 850", description: "Heavyweight black cotton blend. Front graphic.", src: "/merch/halo-hoodie.jpg", status: "AVAILABLE", category: "PAINTINGS", sizes: ["S", "M", "L", "XL", "XXL"] },
+  { id: "m-002", name: "APOCALYPTIC VISION HOODIE", price: "R 850", description: "Premium grey pullover. Features the 6-eyed entity.", src: "/merch/apoc-hoodie.jpg", status: "AVAILABLE", category: "PAINTINGS", sizes: ["S", "M", "L", "XL", "XXL"] },
+  { id: "m-003", name: "NO F#CKS GIVEN TEE", price: "R 450", description: "Black streetwear tee. 100% combed cotton.", src: "/merch/nfg-tee.jpg", status: "AVAILABLE", category: "PAINTINGS", sizes: ["M", "L", "XL"] },
+  { id: "m-004", name: "THE GREY STARE TEE", price: "R 450", description: "Black classic fit tee with vivid green entity portrait.", src: "/merch/stare-tee.jpg", status: "AVAILABLE", category: "PAINTINGS", sizes: ["M", "L", "XL"] },
+  { id: "m-005", name: "VOLCANIC VISION TEE", price: "R 450", description: "White graphic tee featuring volcanic landscape.", src: "/merch/volcanic-tee.jpg", status: "LOW STOCK", category: "PAINTINGS", sizes: ["M", "L"] },
+  { id: "m-006", name: "THE SPECIMEN TEE", price: "R 450", description: "White tee. High-contrast red and grey alien portrait.", src: "/merch/specimen-tee.jpg", status: "AVAILABLE", category: "PAINTINGS", sizes: ["S", "M", "L", "XL"] },
+  { id: "m-007", name: "PLANET WALK TEE", price: "R 450", description: "Navy blue aesthetic tee. Red entity on blue planet.", src: "/merch/planet-tee.jpg", status: "AVAILABLE", category: "PAINTINGS", sizes: ["M", "L", "XL"] },
   
   // ACCESSORIES
   { id: "m-008", name: "ABDUCTION PROTOCOL MUG", price: "R 200", description: "Black ceramic mug. Wraparound UFO graphic.", src: "/merch/abduction-mug.jpg", status: "AVAILABLE", category: "ACCESSORIES", sizes: ["OSFA"] },
@@ -29,7 +29,7 @@ export default function MerchandiseExperience() {
     setSelectedSizes(prev => ({ ...prev, [itemId]: size }));
   };
 
-  const apparelItems = MERCH_INVENTORY.filter(item => item.category === "PHYSICAL WORK");
+  const apparelItems = MERCH_INVENTORY.filter(item => item.category === "PAINTINGS");
   const accessoryItems = MERCH_INVENTORY.filter(item => item.category === "ACCESSORIES");
 
   const ProductCard = ({ item }: { item: any }) => (
@@ -112,12 +112,12 @@ export default function MerchandiseExperience() {
           </p>
         </div>
 
-        {/* PHYSICAL WORK SECTION WITH RIGHT-ALIGNED TAB */}
+        {/* PAINTINGS SECTION WITH RIGHT-ALIGNED TAB */}
         <div className="mb-16">
           <div className="w-full flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div className="flex items-center gap-4 flex-grow">
               <h2 className="text-white font-mono text-sm md:text-base font-bold tracking-widest uppercase whitespace-nowrap">
-                PHYSICAL WORK
+                PAINTINGS
               </h2>
               <div className="h-[1px] flex-grow bg-toxic/30"></div>
             </div>

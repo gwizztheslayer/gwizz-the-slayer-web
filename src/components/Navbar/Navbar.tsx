@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +10,7 @@ type NavigationItem = { label: string; href: string; route: string };
 const primaryNavigation: NavigationItem[] = [
   { label: "Home", href: "/", route: "/" },
   { label: "Discography", href: "/discography", route: "/discography" },
-  { label: "Physical Work", href: "/physical-work", route: "/physical-work" },
+  { label: "PAINTINGS", href: "/physical-work", route: "/physical-work" },
   { label: "Full Gallery", href: "/gallery", route: "/gallery" },
   { label: "Comic Book", href: "/comic", route: "/comic" },
   { label: "Visuals", href: "/visuals", route: "/visuals" },
@@ -75,7 +75,7 @@ export default function Navbar() {
           {primaryNavigation.map((item) => renderLink(item))}
           <div className="relative flex h-full items-center">
             <button ref={moreButtonRef} type="button" aria-expanded={moreOpen} aria-haspopup="true" aria-controls="desktop-more-navigation" onClick={() => setMoreOpen((open) => !open)} className={`flex h-full items-center border-b-2 px-2 text-[10px] font-bold uppercase tracking-wider transition-colors ${moreActive ? "border-toxic text-toxic" : "border-transparent text-white/70 hover:text-toxic"}`}>
-              More <span aria-hidden="true" className="ml-1">⌄</span>
+              More <span aria-hidden="true" className="ml-1">âŒ„</span>
             </button>
             <div id="desktop-more-navigation" hidden={!moreOpen} className="absolute right-0 top-full min-w-48 border border-toxic/30 bg-black px-4 shadow-xl">
               {secondaryNavigation.map((item) => renderLink(item))}
@@ -103,3 +103,4 @@ export default function Navbar() {
     </header>
   );
 }
+
