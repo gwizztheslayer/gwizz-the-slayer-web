@@ -10,11 +10,19 @@ const APPAREL_DROPS = [
   { id: "m-005", name: "GREEN ALIEN PORTRAIT TEE", price: "R 450", src: "/merch/specimen-tee.jpg" }
 ];
 
-const PHYSICAL_ASSETS = [
+type ArsenalAsset = {
+  id: string;
+  name: string;
+  price: string;
+  src?: string;
+  type?: string;
+  status: string;
+};
+const PHYSICAL_ASSETS: ArsenalAsset[] = [
   { id: "p-001", name: "KNYSNA'S SAVIOUR (DELUXE VINYL + COMIC)", price: "R 650", src: "/images/knysna-saviour-cover.jpg", status: "PRE-ORDER" }
 ];
 
-const DIGITAL_ASSETS = [
+const DIGITAL_ASSETS: ArsenalAsset[] = [
   { id: "d-001", name: "DEMONS DON'T SLEEP (MASTER STEMS)", price: "R 300", type: "AUDIO", src: "/images/demons.jpg", status: "AVAILABLE" },
   { id: "d-002", name: "SYNDICATE UI ASSET & FONT PACK", price: "R 200", type: "ASSETS", status: "AVAILABLE" }
 ];
@@ -82,7 +90,7 @@ export default function Arsenal() {
                     <Image src={item.src} alt={item.name} fill sizes="96px" className="object-cover group-hover:scale-105 transition-transform" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-zinc-600 font-mono text-xs tracking-widest">[{item.type}]</span>
+                      <span className="text-zinc-600 font-mono text-xs tracking-widest">[{item.type ?? "PHYSICAL"}]</span>
                     </div>
                   )}
                 </div>
@@ -109,7 +117,7 @@ export default function Arsenal() {
                   {item.src ? (
                     <Image src={item.src} alt={item.name} fill sizes="96px" className="object-cover group-hover:scale-105 transition-transform" />
                   ) : (
-                    <span className="text-zinc-600 font-mono text-xs tracking-widest">[{item.type}]</span>
+                    <span className="text-zinc-600 font-mono text-xs tracking-widest">[{item.type ?? "PHYSICAL"}]</span>
                   )}
                 </div>
                 <div className="flex flex-col flex-grow">
