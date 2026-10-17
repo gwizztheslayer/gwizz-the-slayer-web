@@ -5,9 +5,9 @@
     "scripts":  {
                     "dev":  "next dev",
                     "build":  "cross-env NODE_OPTIONS=--max_old_space_size=4096 next build --webpack",
-                    "vercel-build":  "npm run build",
                     "start":  "next start",
-                    "lint":  "eslint"
+                    "lint":  "eslint",
+                    "vercel-build":  "next build"
                 },
     "dependencies":  {
                          "@ai-sdk/openai":  "^3.0.73",
