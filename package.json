@@ -47,7 +47,7 @@
     "react-map-gl": "^8.1.1",
     "resend": "^6.14.0",
     "sanity": "^5.31.1",
-    "stripe": "^22.2.1",
+    "stripe": "^22.6.2",
     "styled-components": "^6.4.2",
     "thirdweb": "^5.120.1",
     "three": "^0.184.0",
