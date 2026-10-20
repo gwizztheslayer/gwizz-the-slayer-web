@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FEATURED_ARTWORK_IDS, GALLERY_ARTWORKS } from "@/data/gallery-artworks";
+import CheckoutButton from "@/components/Commerce/CheckoutButton";
 
 const featuredArtworks = FEATURED_ARTWORK_IDS
   .map((id) => GALLERY_ARTWORKS.find((artwork) => artwork.id === id))
@@ -20,17 +21,30 @@ export default function CanvasVault() {
           </Link>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {featuredArtworks.map((artwork) => (
-            <article key={artwork.id} className="group border border-white/10 bg-zinc-950/80 transition-colors hover:border-toxic/50">
-              <div className="relative aspect-[4/5] overflow-hidden bg-black">
-                <Image src={artwork.src} alt={artwork.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
-              </div>
-              <div className="p-5">
-                <div className="flex items-baseline justify-between gap-3">
-                  <h3 className="text-lg font-black tracking-wide text-white group-hover:text-toxic">{artwork.title}</h3>
-                  <span className="shrink-0 font-mono text-xs text-zinc-500">{artwork.year}</span>
+          {featuredArtworks.map((artwork: any) => (
+            <article key={artwork.id} className="group flex flex-col justify-between border border-white/10 bg-zinc-950/80 transition-colors hover:border-toxic/50">
+              <div>
+                <div className="relative aspect-[4/5] overflow-hidden bg-black">
+                  <Image src={artwork.src} alt={artwork.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" className="object-cover transition-transform duration-700 group-hover:scale-105" />
                 </div>
-                <p className="mt-2 text-sm text-zinc-400">{artwork.medium}</p>
+                <div className="p-5">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <h3 className="text-lg font-black tracking-wide text-white group-hover:text-toxic">{artwork.title}</h3>
+                    <span className="shrink-0 font-mono text-xs text-zinc-500">{artwork.year}</span>
+                  </div>
+                  <p className="mt-2 text-sm text-zinc-400">{artwork.medium}</p>
+                  {artwork.price && (
+                    <p className="mt-3 font-mono text-emerald-400 font-bold">ZAR {artwork.price}.00</p>
+                  )}
+                </div>
+              </div>
+              <div className="p-5 pt-0 mt-auto">
+                <CheckoutButton cartItems={[{
+                  name: artwork.title,
+                  price: artwork.price || 0,
+                  quantity: 1,
+                  image: typeof artwork.src === 'string' ? artwork.src : artwork.src?.src
+                }]} />
               </div>
             </article>
           ))}
