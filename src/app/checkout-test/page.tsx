@@ -1,13 +1,12 @@
 import CheckoutButton from "@/components/Commerce/CheckoutButton";
 
 export default function CheckoutTest() {
-  // Simulating a physical artwork in the cart
   const mockCart = [
     {
-      name: "Original Acrylic Canvas - 'Dark Fantasy' Series",
-      price: 2500.00, // ZAR
+      name: "Original Acrylic Canvas",
+      price: 2500.00,
       quantity: 1,
-      image: "https://via.placeholder.com/150", // Placeholder image for Stripe
+      image: "https://via.placeholder.com/150",
     }
   ];
 
@@ -26,7 +25,6 @@ export default function CheckoutTest() {
           Shipping address collected securely via Stripe.
         </p>
 
-        {/* This is the button component we built earlier */}
         <CheckoutButton cartItems={mockCart} />
       </div>
     </main>
