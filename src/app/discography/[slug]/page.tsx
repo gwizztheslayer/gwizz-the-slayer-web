@@ -16,26 +16,19 @@ export default function ReleasePage({ params }: { params: { slug: string } }) {
   return (
     <main className="min-h-screen bg-black text-white p-8 md:p-20 font-mono">
       <div className="max-w-5xl mx-auto">
-        <Link href="/" className="text-toxic hover:text-white mb-12 inline-block text-xs uppercase tracking-widest transition-colors">
-          &lt; Return to Base
+        <Link href="/discography" className="text-toxic hover:text-white mb-12 inline-block text-xs uppercase tracking-widest transition-colors">
+          <span className="mr-2">&lt;</span> Return to Discography
         </Link>
 
         <article className="grid md:grid-cols-[350px_1fr] gap-12 items-start">
           <div className="relative aspect-square w-full border border-zinc-800 bg-zinc-950 group hover:border-toxic transition-colors duration-500">
-            <Image
-              src={release.cover}
-              alt={release.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 350px"
-              priority
-            />
+            <Image src={release.cover} alt={release.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 350px" priority />
           </div>
 
           <div>
             <header className="mb-10 border-b border-zinc-800 pb-8">
               <p className="text-zinc-500 uppercase tracking-widest text-xs mb-3">
-                {isAlbum ? "Album" : "Single"} / {release.releaseDate || "2026"}
+                {isAlbum ? 'Album' : 'Single'} / {release.releaseDate || '2026'}
               </p>
               <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white mb-6">
                 {release.title}
