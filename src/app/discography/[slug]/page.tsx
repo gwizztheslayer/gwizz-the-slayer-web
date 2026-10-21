@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { catalogueAlbums, catalogueSingles } from '@/data/discography';
+import WaveformPlayer from '@/components/WaveformPlayer/WaveformPlayer';
 
 export default async function ReleasePage({ params }: { params: any }) {
   const resolvedParams = await params;
@@ -29,7 +30,6 @@ export default async function ReleasePage({ params }: { params: any }) {
   const isAlbum = !!album;
   const tracks = isAlbum ? album.tracks : [{ title: single.title, audio: single.audio }];
   
-  // Safely extract optional data without triggering strict TypeScript errors
   const description = (release as any).description;
   const credits = (release as any).credits;
   const producer = (release as any).producer;
@@ -42,13 +42,11 @@ export default async function ReleasePage({ params }: { params: any }) {
         </Link>
 
         <article className="grid md:grid-cols-[350px_1fr] gap-12 items-start">
-          {/* Cover Art & Credits Column */}
           <div className="space-y-8">
             <div className="relative aspect-square w-full border border-zinc-800 bg-zinc-950 group hover:border-toxic transition-colors duration-500">
               <Image src={release.cover} alt={release.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 350px" priority />
             </div>
             
-            {/* Credits Section */}
             {(credits || producer) && (
               <div className="border border-zinc-900 bg-zinc-950/50 p-6">
                 <h3 className="text-toxic text-[10px] uppercase tracking-[0.2em] mb-4 border-b border-zinc-800 pb-2">Archival Credits</h3>
@@ -70,7 +68,6 @@ export default async function ReleasePage({ params }: { params: any }) {
             )}
           </div>
 
-          {/* Data Column */}
           <div>
             <header className="mb-10 border-b border-zinc-800 pb-8">
               <div className="flex items-center gap-3 mb-3">
@@ -86,7 +83,6 @@ export default async function ReleasePage({ params }: { params: any }) {
                 {release.title}
               </h1>
               
-              {/* Description Section */}
               {description && (
                 <div className="text-zinc-400 text-sm leading-relaxed mb-8 max-w-2xl font-sans font-light border-l-2 border-zinc-800 pl-4">
                   {description}
@@ -102,25 +98,9 @@ export default async function ReleasePage({ params }: { params: any }) {
 
             <section>
               <h2 className="text-zinc-500 uppercase tracking-widest text-xs mb-6 border-l-2 border-toxic pl-3">Tracklist / Audio Data</h2>
-              <ul className="divide-y divide-zinc-900 border-t border-zinc-900">
+              <ul className="border-t border-zinc-900">
                 {tracks.map((track: any, i: number) => (
-                  <li key={i} className="py-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4 group">
-                    <div className="flex items-center gap-6">
-                      <span className="text-zinc-700 text-xs font-bold w-4">{String(i + 1).padStart(2, '0')}</span>
-                      <span className="text-zinc-300 group-hover:text-toxic transition-colors text-sm uppercase tracking-wider">{track.title}</span>
-                    </div>
-                    {/* Dark-mode inverted audio player renders only if audio exists */}
-                    {track.audio && (
-                      <audio 
-                        controls 
-                        preload="none" 
-                        controlsList="nodownload"
-                        className="h-8 w-full md:w-64 max-w-full invert grayscale opacity-80 hover:opacity-100 transition-opacity outline-none"
-                      >
-                        <source src={track.audio} type="audio/mpeg" />
-                      </audio>
-                    )}
-                  </li>
+                  <WaveformPlayer key={i} track={track} index={i} />
                 ))}
               </ul>
             </section>
