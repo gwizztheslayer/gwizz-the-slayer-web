@@ -140,7 +140,7 @@ function AlbumCard({ album, full }: { album: CatalogueAlbum; full: boolean }) {
   if (!full) {
     return (
       <article className="border border-white/10 bg-zinc-950 p-3 transition-colors hover:border-toxic/60">
-        <Link href={`/discography#album-${album.slug}`} className="group block">
+        <Link href={`/discography/${album.slug}`} className="group block">
           <div className="relative aspect-square overflow-hidden">
             <Image src={album.cover} alt={`${album.title} cover`} fill sizes="(max-width: 640px) 45vw, 300px" className="object-cover transition-transform duration-500 group-hover:scale-105" />
           </div>
