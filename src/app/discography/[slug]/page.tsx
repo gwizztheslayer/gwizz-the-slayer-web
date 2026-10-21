@@ -11,7 +11,7 @@ export default function ReleasePage({ params }: { params: { slug: string } }) {
   if (!release) return notFound();
 
   const isAlbum = !!album;
-  const tracks = isAlbum ? album.tracks : [{ title: single.title, audio: single.audio }];
+  const tracks = album ? album.tracks : (single ? [{ title: single.title, audio: single.audio }] : []);
 
   return (
     <main className="min-h-screen bg-black text-white p-8 md:p-20 font-mono">
