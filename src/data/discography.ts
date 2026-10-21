@@ -8,6 +8,10 @@ export type CatalogueAlbum = {
   title: string;
   cover: string;
   featureFmUrl?: string | null;
+  releaseDate?: string | null;
+  description?: string | null;
+  credits?: string | null;
+  producer?: string | null;
   tracks: CatalogueAlbumTrack[];
 };
 
@@ -18,11 +22,13 @@ export type CatalogueSingle = {
   audio: string | null;
   album: string | null;
   featureFmUrl: string | null;
-  description: string | null;
-  duration: string | null;
-  distributedBy: string | null;
-  publishedBy: string | null;
-  producedBy: string | null;
+  description?: string | null;
+  duration?: string | null;
+  distributedBy?: string | null;
+  publishedBy?: string | null;
+  producedBy?: string | null;
+  producer?: string | null;
+  credits?: string | null;
   featuredArtists: string[];
   releaseDate: string | null;
   songwriters?: string | null;
@@ -37,6 +43,9 @@ export const catalogueAlbums: CatalogueAlbum[] = [
     title: "DEMONS DON'T SLEEP",
     cover: "/images/demons.png",
     featureFmUrl: "https://ffm.to/demonsdontsleepalbum",
+    releaseDate: "May 2026",
+    description: "The official full-length LP. Rooted heavily in the Knysna underground, this project delivers hard-hitting modern trap and explores the darker, urban-industrial aesthetic of the Dreams Of Colour universe.",
+    credits: "Executive produced by G-Wizz, The Slayer.",
     tracks: [
       { title: "All In A Day", audio: "/audio/all in a day.mp3" },
       { title: "Side Eye Ft. Acidiq Truth", audio: "/audio/side eye.mp3" },
@@ -53,6 +62,9 @@ export const catalogueAlbums: CatalogueAlbum[] = [
     slug: "knysnas-saviours",
     title: "KNYSNA'S SAVIOURS",
     cover: "/images/knysnas-saviours.png",
+    releaseDate: "2026",
+    description: "A collaborative descent into the urban-industrial underground. Blending modern trap with deep-rooted lore, Knysna's Saviour acts as a dual narrative, expanding the scope of the local scene.",
+    credits: "Full collaboration album by G-Wizz, The Slayer and Icebergh. Associated webcomic and visual assets directed in-house.",
     tracks: [
       { title: "Bozza", audio: "/audio/Bozza.mp3" },
       { title: "IDGAF (Ft. Acidiq Truth)", audio: null },
@@ -68,6 +80,9 @@ export const catalogueAlbums: CatalogueAlbum[] = [
     title: "HEAVEN IS WHAT YOU MAKE IT AND HELL IS WHAT YOU GO THROUGH",
     cover: "/images/heaven-hell.png",
     featureFmUrl: "https://ffm.to/heaven-is-what-you-make-it-and-hell-is-what-you",
+    releaseDate: "April 2026",
+    description: "A pivotal project exploring duality and survival. Blending atmospheric trap production with sharp lyricism, this release serves as a bridge into the deeper, tech-forward lore of the catalogue.",
+    credits: "Written and recorded at Dreams Of Colour Studios, Knysna.",
     tracks: [
       { title: "Dead Presidents", audio: "/audio/dead presidents.mp3" },
       { title: "MIA", audio: "/audio/mia.mp3" },
@@ -104,8 +119,6 @@ export const catalogueAlbums: CatalogueAlbum[] = [
   },
 ];
 
-// Feature.fm URLs and visible credits are transcribed from the provided screenshots and site data.
-// Spotify IDs and durations below are from the public artist catalog; SmartLink creation timestamps are not release dates.
 export const catalogueSingles: CatalogueSingle[] = [
   {
     slug: "idgaf",
@@ -146,12 +159,13 @@ export const catalogueSingles: CatalogueSingle[] = [
     audio: "/audio/CX.mp3",
     album: "KNYSNA'S SAVIOURS",
     featureFmUrl: "https://ffm.to/cx",
-    description: null,
+    description: "Lead single off the collaborative Knysna's Saviour project, bringing together heavy-hitters from the local roster.",
     distributedBy: null,
     publishedBy: null,
     producedBy: null,
+    credits: "Featuring Acidiq Truth, Icebergh, and XXXceptional.",
     featuredArtists: ["Acidiq Truth", "Icebergh", "Xxxceptional"],
-    releaseDate: "2026",
+    releaseDate: "March 2026",
     duration: "4:05",
     spotifyTrackId: "1QcdIWMMZ16WFaZDgRJrDi",
   },
@@ -162,12 +176,12 @@ export const catalogueSingles: CatalogueSingle[] = [
     audio: "/audio/Drip.mp3",
     album: "KNYSNA'S SAVIOURS",
     featureFmUrl: "https://ffm.to/drip-gwizztheslayer",
-    description: null,
+    description: "A heavy, synth-driven modern trap anthem setting the tone for the 2026 run.",
     distributedBy: null,
     publishedBy: null,
     producedBy: "Ceoxcam88",
     featuredArtists: [],
-    releaseDate: "2026",
+    releaseDate: "January 2026",
     duration: "2:47",
     spotifyTrackId: "3sKK7KcWVXoaD6CoHHafKj",
   },
@@ -644,59 +658,3 @@ export const catalogueSingles: CatalogueSingle[] = [
 
 export const getCatalogueSingle = (slug: string) =>
   catalogueSingles.find((single) => single.slug === slug);
-export const catalogueAlbums: CatalogueAlbum[] = [
-  {
-    slug: "demons-dont-sleep",
-    title: "Demons Don't Sleep",
-    releaseDate: "May 2026",
-    cover: "/covers/demons-dont-sleep.jpg", // Update with actual image path
-    description: "The official full-length LP. Rooted heavily in the Knysna underground, this project delivers hard-hitting modern trap and explores the darker, urban-industrial aesthetic of the Dreams Of Colour universe.",
-    credits: "Executive produced by G-Wizz, The Slayer.",
-    tracks: [
-      // ... your existing tracks
-    ]
-  },
-  {
-    slug: "heaven-is-what-you-make-it",
-    title: "Heaven Is What You Make It And Hell Is What You Go Through",
-    releaseDate: "April 2026",
-    cover: "/covers/heaven.jpg", // Update with actual image path
-    description: "A pivotal project exploring duality and survival. Blending atmospheric trap production with sharp lyricism, this release serves as a bridge into the deeper, tech-forward lore of the catalogue.",
-    credits: "Written and recorded at Dreams Of Colour Studios, Knysna.",
-    tracks: [
-      // ... your existing tracks
-    ]
-  },
-  {
-    slug: "knysnas-saviour",
-    title: "Knysna's Saviour",
-    releaseDate: "2026",
-    cover: "/covers/knysnas-saviour.jpg",
-    description: "A collaborative descent into the urban-industrial underground. Blending modern trap with deep-rooted lore, Knysna's Saviour acts as a dual narrative, expanding the scope of the local scene.",
-    credits: "Full collaboration album by G-Wizz, The Slayer and Icebergh. Associated webcomic and visual assets directed in-house.",
-    tracks: [
-      // ... your existing tracks
-    ]
-  }
-];
-
-export const catalogueSingles: CatalogueSingle[] = [
-  {
-    slug: "cx",
-    title: "CX",
-    releaseDate: "March 2026",
-    cover: "/covers/cx.jpg", // Update with actual image path
-    album: "Knysna's Saviour",
-    description: "Lead single off the collaborative Knysna's Saviour project, bringing together heavy-hitters from the local roster.",
-    credits: "Featuring Acidiq Truth, Icebergh, and XXXceptional.",
-  },
-  {
-    slug: "drip",
-    title: "Drip",
-    releaseDate: "January 2026",
-    cover: "/covers/drip.jpg", // Update with actual image path
-    description: "A heavy, synth-driven modern trap anthem setting the tone for the 2026 run.",
-    producer: "Ceoxcam88",
-  }
-  // ... other singles
-];
