@@ -3,15 +3,34 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { catalogueAlbums, catalogueSingles } from '@/data/discography';
 
-export default function ReleasePage({ params }: { params: { slug: string } }) {
-  const album = catalogueAlbums.find(a => a.slug === params.slug);
-  const single = catalogueSingles.find(s => s.slug === params.slug);
+export default async function ReleasePage({ params }: { params: any }) {
+  // Await params to safely support Next.js 15 async route parameters
+  const resolvedParams = await params;
+  const currentSlug = resolvedParams?.slug || "";
+
+  // Case-insensitive matching to prevent minor typos from breaking the route
+  const album = catalogueAlbums.find(a => a.slug.toLowerCase() === currentSlug.toLowerCase());
+  const single = catalogueSingles.find(s => s.slug.toLowerCase() === currentSlug.toLowerCase());
   const release = album || single;
 
-  if (!release) return notFound();
+  // Visual debugger: If the slug doesn't exist, tell us exactly what it was looking for
+  if (!release) {
+    return (
+      <main className="min-h-screen bg-black text-white flex items-center justify-center p-8 font-mono">
+        <div className="text-center border border-toxic p-8 max-w-lg">
+          <h1 className="text-toxic text-2xl font-bold mb-4">DATA MISMATCH</h1>
+          <p className="text-zinc-400 mb-2">The dynamic route is working, but it cannot find this release.</p>
+          <p className="text-zinc-400">Your data file does not contain the slug: <strong className="text-white">"{currentSlug}"</strong></p>
+          <Link href="/discography" className="mt-8 inline-block text-xs uppercase tracking-widest text-toxic hover:text-white transition-colors">
+            Return to Discography
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   const isAlbum = !!album;
-  const tracks = album ? album.tracks : (single ? [{ title: single.title, audio: single.audio }] : []);
+  const tracks = isAlbum ? album.tracks : [{ title: single.title, audio: single.audio }];
 
   return (
     <main className="min-h-screen bg-black text-white p-8 md:p-20 font-mono">
