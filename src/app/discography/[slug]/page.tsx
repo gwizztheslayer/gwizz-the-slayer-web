@@ -4,16 +4,13 @@ import Link from 'next/link';
 import { catalogueAlbums, catalogueSingles } from '@/data/discography';
 
 export default async function ReleasePage({ params }: { params: any }) {
-  // Await params to safely support Next.js 15 async route parameters
   const resolvedParams = await params;
   const currentSlug = resolvedParams?.slug || "";
 
-  // Case-insensitive matching to prevent minor typos from breaking the route
   const album = catalogueAlbums.find(a => a.slug.toLowerCase() === currentSlug.toLowerCase());
   const single = catalogueSingles.find(s => s.slug.toLowerCase() === currentSlug.toLowerCase());
   const release = album || single;
 
-  // Visual debugger: If the slug doesn't exist, tell us exactly what it was looking for
   if (!release) {
     return (
       <main className="min-h-screen bg-black text-white flex items-center justify-center p-8 font-mono">
@@ -31,6 +28,11 @@ export default async function ReleasePage({ params }: { params: any }) {
 
   const isAlbum = !!album;
   const tracks = isAlbum ? album.tracks : [{ title: single.title, audio: single.audio }];
+  
+  // Safely extract optional data without triggering strict TypeScript errors
+  const description = (release as any).description;
+  const credits = (release as any).credits;
+  const producer = (release as any).producer;
 
   return (
     <main className="min-h-screen bg-black text-white p-8 md:p-20 font-mono">
@@ -40,24 +42,68 @@ export default async function ReleasePage({ params }: { params: any }) {
         </Link>
 
         <article className="grid md:grid-cols-[350px_1fr] gap-12 items-start">
-          <div className="relative aspect-square w-full border border-zinc-800 bg-zinc-950 group hover:border-toxic transition-colors duration-500">
-            <Image src={release.cover} alt={release.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 350px" priority />
+          {/* Cover Art & Credits Column */}
+          <div className="space-y-8">
+            <div className="relative aspect-square w-full border border-zinc-800 bg-zinc-950 group hover:border-toxic transition-colors duration-500">
+              <Image src={release.cover} alt={release.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 350px" priority />
+            </div>
+            
+            {/* Credits Section (Only renders if data exists) */}
+            {(credits || producer) && (
+              <div className="border border-zinc-900 bg-zinc-950/50 p-6">
+                <h3 className="text-toxic text-[10px] uppercase tracking-[0.2em] mb-4 border-b border-zinc-800 pb-2">Archival Credits</h3>
+                <dl className="space-y-4 text-xs font-sans tracking-wide">
+                  {producer && (
+                    <div>
+                      <dt className="text-zinc-600 font-mono uppercase tracking-widest text-[10px] mb-1">Production</dt>
+                      <dd className="text-zinc-300">{producer}</dd>
+                    </div>
+                  )}
+                  {credits && (
+                    <div>
+                      <dt className="text-zinc-600 font-mono uppercase tracking-widest text-[10px] mb-1">Features / Credits</dt>
+                      <dd className="text-zinc-300">{credits}</dd>
+                    </div>
+                  )}
+                </dl>
+              </div>
+            )}
           </div>
 
+          {/* Data Column */}
           <div>
             <header className="mb-10 border-b border-zinc-800 pb-8">
-              <p className="text-zinc-500 uppercase tracking-widest text-xs mb-3">
-                {isAlbum ? 'Album' : 'Single'} / {release.releaseDate || '2026'}
-              </p>
+              <div className="flex items-center gap-3 mb-3">
+                <span className="border border-toxic text-toxic px-2 py-1 text-[9px] uppercase tracking-widest">
+                  {isAlbum ? 'Full Project' : 'Single Track'}
+                </span>
+                <span className="text-zinc-500 uppercase tracking-widest text-xs">
+                  {release.releaseDate || '2026'}
+                </span>
+              </div>
+              
               <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white mb-6">
                 {release.title}
               </h1>
+              
+              {/* Description Section (Only renders if data exists) */}
+              {description && (
+                <div className="text-zinc-400 text-sm leading-relaxed mb-8 max-w-2xl font-sans font-light border-l-2 border-zinc-800 pl-4">
+                  {description}
+                </div>
+              )}
+
+              {release.featureFmUrl && (
+                <a href={release.featureFmUrl} target="_blank" rel="noopener noreferrer" className="inline-block border border-toxic bg-toxic/10 text-toxic px-8 py-3 text-xs font-bold uppercase tracking-widest hover:bg-toxic hover:text-black transition-colors">
+                  Access Release Hub
+                </a>
+              )}
             </header>
 
             <section>
-              <h2 className="text-zinc-500 uppercase tracking-widest text-xs mb-6 border-l-2 border-toxic pl-3">Tracklist / Data</h2>
+              <h2 className="text-zinc-500 uppercase tracking-widest text-xs mb-6 border-l-2 border-toxic pl-3">Tracklist / Audio Data</h2>
               <ul className="divide-y divide-zinc-900 border-t border-zinc-900">
-                {tracks.map((track, i) => (
+                {tracks.map((track: any, i: number) => (
                   <li key={i} className="py-4 flex justify-between items-center group">
                     <div className="flex items-center gap-6">
                       <span className="text-zinc-700 text-xs font-bold w-4">{String(i + 1).padStart(2, '0')}</span>
