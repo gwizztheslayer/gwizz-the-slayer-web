@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
 // Initialize Stripe using the secret key we securely injected into Vercel
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+const stripe = new Stripe((process.env.STRIPE_SECRET_KEY || "dummy_key_for_build-us1") as string, {
   apiVersion: "2024-09-30.acacia",
 });
 
